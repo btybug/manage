@@ -1,0 +1,19 @@
+{
+  "name": "Classifiers Build",
+  "namespace": "Classifiers",
+  "type": "plugin",
+  "module": "manage",
+  "version": "0.1",
+  "description": "Classifiers Build Plugin",
+  "enabled": true,
+  "author": "Edo",
+  "author_site": "http:\/\/classifiers.com\/",
+  "route": "Routes\/web.php",
+  "autoload": "Autoload",
+  "have_setting": "0",
+  "provider": "Providers\\PluginServiceProvider",
+  "tables": [],
+  "slug": "Classifiers",
+  "basename": "Classifiers",
+  "created_at": 1488397850
+}
