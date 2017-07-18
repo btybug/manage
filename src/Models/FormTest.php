@@ -6,7 +6,7 @@
  * Time: 2:07 PM
  */
 
-namespace App\Modules\Manage\Models;
+namespace Sahakavatar\Manage\Models;
 
 
 use app\Models\BaseModel;

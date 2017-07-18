@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Manage\Providers;
+namespace Sahakavatar\Manage\Providers;
 
-//use Caffeinated\Modules\Support\ServiceProvider;
+//use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class ModuleServiceProvider extends ServiceProvider

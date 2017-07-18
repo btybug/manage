@@ -6,7 +6,7 @@
  * Time: 12:06 PM
  */
 
-namespace App\Modules\Manage\Http\Controllers;
+namespace Sahakavatar\Manage\Http\Controllers;
 
 
 use Illuminate\Http\Request;

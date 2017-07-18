@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Manage\Plugins\Classifiers\Providers;
+namespace Sahakavatar\Manage\Plugins\Classifiers\Providers;
 
-use Caffeinated\Modules\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class PluginServiceProvider extends ServiceProvider
 {

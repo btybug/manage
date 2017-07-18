@@ -6,7 +6,7 @@
  * Time: 4:01 PM
  */
 
-namespace App\Modules\Manage\Plugins\Classifiers\Http;
+namespace Sahakavatar\Manage\Plugins\Classifiers\Http;
 use App\Http\Controllers\Controller;
 
 class ClassifyController extends Controller

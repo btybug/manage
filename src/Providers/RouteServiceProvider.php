@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Manage\Providers;
+namespace Sahakavatar\Manage\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -60,7 +60,7 @@ class RouteServiceProvider extends ServiceProvider
                 'prefix' => 'admin/manage',
                 'namespace' => $this->namespace,
             ], function ($router) {
-                require module_path('manage', 'Routes/web.php');
+                require __DIR__.'/../Routes/web.php';
             });
         });
     }
@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace'  => $this->namespace,
             'prefix'     => 'api',
         ], function ($router) {
-            require module_path('manage', 'Routes/api.php');
+            require __DIR__.'/../Routes/api.php';
         });
     }
 }

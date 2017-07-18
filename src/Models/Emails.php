@@ -6,7 +6,7 @@
  * Time: 2:21 PM
  */
 
-namespace App\Modules\Manage\Models;
+namespace Sahakavatar\Manage\Models;
 
 
 use App\Models\EventSubscriber\Independent\Independent;

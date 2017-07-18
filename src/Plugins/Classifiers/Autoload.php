@@ -1,5 +1,5 @@
 <?php
-namespace App\Modules\Manage\Plugins\Classifiers;
+namespace Sahakavatar\Manage\Plugins\Classifiers;
 /**
  * Created by PhpStorm.
  * User: Edo

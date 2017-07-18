@@ -6,7 +6,7 @@
  * Time: 2:17 PM
  */
 
-namespace App\Modules\Manage\Models;
+namespace Sahakavatar\Manage\Models;
 
 use App\Models\ContentLayouts\ContentLayouts;
 use App\Models\Urlmanager;
