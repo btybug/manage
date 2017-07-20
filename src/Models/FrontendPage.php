@@ -8,10 +8,9 @@
 
 namespace Sahakavatar\Manage\Models;
 
-use App\Models\ContentLayouts\ContentLayouts;
-use App\Models\Urlmanager;
-use App\Modules\Settings\Models\Settings;
-use App\Modules\Users\Models\Membership;
+use Sahakavatar\Cms\Models\Urlmanager;
+use Sahakavatar\Settings\Models\Settings;
+use Sahakavatar\User\Models\Membership;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -79,12 +78,12 @@ class FrontendPage extends Model
 
     public function permission_membership()
     {
-        return $this->hasMany('App\Modules\Users\Models\MembershipPermissions', 'page_id', 'id');
+        return $this->hasMany('Sahakavatar\User\Models\MembershipPermissions', 'page_id', 'id');
     }
 
     public function permission_role()
     {
-        return $this->hasMany('App\Modules\Users\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
+        return $this->hasMany('Sahakavatar\User\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
     }
 
     /**
@@ -100,7 +99,7 @@ class FrontendPage extends Model
      */
     public function parent()
     {
-        return $this->belongsTo('App\Modules\Manage\Models\FrontendPage', 'parent_id');
+        return $this->belongsTo(FrontendPage::class, 'parent_id');
     }
 
     /**
@@ -108,7 +107,7 @@ class FrontendPage extends Model
      */
     public function childs()
     {
-        return $this->hasMany('App\Modules\Manage\Models\FrontendPage', 'parent_id');
+        return $this->hasMany(FrontendPage::class, 'parent_id');
     }
 
     /**
@@ -116,7 +115,7 @@ class FrontendPage extends Model
      */
     public function editor()
     {
-        return $this->belongsTo('App\Modules\Users\User', 'edited_by', 'id');
+        return $this->belongsTo('Sahakavatar\User\User', 'edited_by', 'id');
     }
 
     /**
@@ -124,7 +123,7 @@ class FrontendPage extends Model
      */
     public function author()
     {
-        return $this->belongsTo('App\Modules\Users\User', 'user_id', 'id');
+        return $this->belongsTo('Sahakavatar\User\User', 'user_id', 'id');
     }
 
     /**
@@ -132,7 +131,7 @@ class FrontendPage extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany('App\Modules\Manage\Models\Tag', 'frontend_pages_tags','frontend_page_id','tags_id','id');
+        return $this->belongsToMany(Tag::class, 'frontend_pages_tags','frontend_page_id','tags_id','id');
     }
 
     /**
@@ -140,7 +139,7 @@ class FrontendPage extends Model
      */
     public function urlManager()
     {
-        return $this->hasOne('App\Models\Urlmanager', 'front_page_id');
+        return $this->hasOne(Urlmanager::class, 'front_page_id');
     }
 
     public static function addTags($tags,$id)
@@ -230,8 +229,7 @@ class FrontendPage extends Model
         }
     }
 
-    public static function checkAccess($page_id,$membership_slug){
-        $page = self::find($page_id);
+    public static function checkAccess($page,$membership_slug){
         $membership = Membership::where('slug',$membership_slug)->first();
         if($page && $membership){
             $access = $page->permission_membership()->where('membership_id', $membership->id)->first();
