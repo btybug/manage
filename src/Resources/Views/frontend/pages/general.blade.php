@@ -1,4 +1,4 @@
-@extends('layouts.mTabs',['index'=>'page_edit'])
+@extends('cms::layouts.mTabs',['index'=>'page_edit'])
 @section('tab')
 
     @stop

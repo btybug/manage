@@ -149,8 +149,8 @@
 @stop
 
 @section('JS')
-  {!! HTML::script('public/libs/bootbox/js/bootbox.min.js') !!}
-  {!! HTML::script('public/libs/jqueryui/js/jquery-ui.min.js') !!}
-  {!! HTML::script('public/libs/nestedSortable/jquery.mjs.nestedSortable.js') !!}
+  {!! HTML::script('libs/bootbox/js/bootbox.min.js') !!}
+  {!! HTML::script('libs/jqueryui/js/jquery-ui.min.js') !!}
+  {!! HTML::script('libs/nestedSortable/jquery.mjs.nestedSortable.js') !!}
   {!! HTML::script('public/js/menu.js?v=0.03') !!}
 @stop

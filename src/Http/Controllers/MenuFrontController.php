@@ -11,13 +11,9 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\helpers\helpers;
+use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
-use App\Modules\Create\Models\CHelper;
-use App\Modules\Create\Models\Corepage as Page;
-use App\Modules\Create\Models\Menu;
-use App\Modules\Create\Models\MenuBuilder;
-use App\Modules\Users\Models\Roles;
+use Sahakavatar\User\Models\Roles;
 use Datatables;
 use File;
 use Illuminate\Http\JsonResponse;
@@ -39,19 +35,20 @@ class MenuFrontController extends Controller
     private $helper = null;
 
     public function __construct (
-        Menu $menu,
+
         Page $page,
         MenuBuilder $mb,
         CHelper $chelper
 
     )
     {
-        $this->menu = $menu;
+        dd(1);
+
         $this->page = $page;
         $this->user_roles = Roles::pluck('name', 'slug');
         $this->mb = $mb;
         $this->chelper = $chelper;
-        $this->dhelp = new \App\helpers\dbhelper;
+        $this->dhelp = new \Sahakavatar\Cms\Helpers\helpers;
         $this->helper = new helpers;
     }
 
@@ -70,6 +67,8 @@ class MenuFrontController extends Controller
     }
     public function getIndex (Request $request)
     {
+        dd(1);
+
         $type = "backend";
         $menu = $request->get('p');
         $menus = [];

@@ -24,7 +24,7 @@ class Emails extends Model
 
     public function group()
     {
-        return $this->belongsTo('App\Modules\Manage\Models\EmailGroups', 'group_id');
+        return $this->belongsTo('Sahakavatar\Manage\Models\EmailGroups', 'group_id');
     }
 
     public function onFormSubmit($event)

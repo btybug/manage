@@ -41,7 +41,7 @@ class ClassifierItemPage extends Model
      */
     public function classifierItem ()
     {
-        return $this->belongsTo('App\Modules\Manage\Models\ClassifierItem', 'classifier_item_id', 'id');
+        return $this->belongsTo(ClassifierItem::class, 'classifier_item_id', 'id');
     }
 
     /**
@@ -49,7 +49,7 @@ class ClassifierItemPage extends Model
      */
     public function classifier ()
     {
-        return $this->belongsTo('App\Modules\Manage\Models\Classifier', 'classifier_id', 'id');
+        return $this->belongsTo(Classifier::class, 'classifier_id', 'id');
     }
 
     public function getClassifierItemsByClassifier() {
@@ -75,7 +75,7 @@ class ClassifierItemPage extends Model
      */
     public function frontPage ()
     {
-        return $this->belongsTo('App\Modules\Manage\Models\FrontendPage', 'front_page_id', 'id');
+        return $this->belongsTo(FrontendPage::class, 'front_page_id', 'id');
     }
 
     public static function createClassifierPageRelations($classifiers, $pageId) {

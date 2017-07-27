@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class FrontendPage
- * @package App\Modules\Manage\Models
+ * @package Sahakavatar\Manage\Models
  */
 class FrontendPage extends Model
 {

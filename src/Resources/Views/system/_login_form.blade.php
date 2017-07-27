@@ -22,24 +22,24 @@
 				  @if(isset($system['enable_registration']) && $system['enable_registration'] && isset($system['default_frontend_role']) && $system['default_frontend_role'])
 					  <div class="email-activation-div">
 						  {!! Form::label('default_frontend_role','Default role',['class' => 'control-label labels'])!!}
-						  {!! Form::select('default_frontend_role', \App\Modules\Users\Models\Roles::getFrontendRoles(),(isset($system['default_frontend_role']))?$system['default_frontend_role']:null,['class'=>'form-control'])!!}
+						  {!! Form::select('default_frontend_role', \Sahakavatar\User\Models\Roles::getFrontendRoles(),(isset($system['default_frontend_role']))?$system['default_frontend_role']:null,['class'=>'form-control'])!!}
 					  </div>
 				  @else
 					  <div class="hidden email-activation-div">
 						  {!! Form::label('default_frontend_role','Default role',['class' => 'control-label labels'])!!}
-						  {!! Form::select('default_frontend_role',\App\Modules\Users\Models\Roles::getFrontendRoles(),(isset($system['default_frontend_role']))?$system['default_frontend_role']: null,['class'=>'form-control'])!!}
+						  {!! Form::select('default_frontend_role',\Sahakavatar\User\Models\Roles::getFrontendRoles(),(isset($system['default_frontend_role']))?$system['default_frontend_role']: null,['class'=>'form-control'])!!}
 					  </div>
 				  @endif
 
 				  @if(isset($system['enable_registration']) && $system['enable_registration'] && isset($system['default_user_status']) && $system['default_user_status'])
 					  <div class="email-activation-div">
 						  {!! Form::label('default_user_status','Default status',['class' => 'control-label labels'])!!}
-						  {!! Form::select('default_user_status', \App\Modules\Users\Models\Status::pluck('name', 'id'),(isset($system['default_user_status']))?$system['default_user_status']:null,['class'=>'form-control'])!!}
+						  {!! Form::select('default_user_status', \Sahakavatar\User\Models\Status::pluck('name', 'id'),(isset($system['default_user_status']))?$system['default_user_status']:null,['class'=>'form-control'])!!}
 					  </div>
 				  @else
 					  <div class="hidden email-activation-div">
 						  {!! Form::label('default_user_status','Default status',['class' => 'control-label labels'])!!}
-						  {!! Form::select('default_user_status',\App\Modules\Users\Models\Status::pluck('name', 'id'),(isset($system['default_user_status']))?$system['default_user_status']: null,['class'=>'form-control'])!!}
+						  {!! Form::select('default_user_status',\Sahakavatar\User\Models\Status::pluck('name', 'id'),(isset($system['default_user_status']))?$system['default_user_status']: null,['class'=>'form-control'])!!}
 					  </div>
 				  @endif
 

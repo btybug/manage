@@ -11,16 +11,16 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\helpers\dbhelper;
-use App\helpers\helpers;
+use Sahakavatar\Cms\Helpers\dbhelper;
+use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
-use App\Repositories\AdminsettingRepository as Settings;
+use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
 use File;
 use Illuminate\Http\Request;
 
 /**
  * Class SettingsController
- * @package App\Modules\Frontend\Http\Controllers
+ * @package Sahakavatar\Frontend\Http\Controllers
  */
 class GeneralController extends Controller
 {
@@ -77,7 +77,7 @@ class GeneralController extends Controller
             $input['site_logo'] = $name;
         }
 
-        $this->settings->updateSystemSettings($input);
+//        $this->settings->updateSystemSettings($input);
         $this->helpers->updatesession('System successfully saved');
 
         return redirect()->back();

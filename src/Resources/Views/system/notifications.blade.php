@@ -1,4 +1,4 @@
-@extends('layouts.mTabs',['index'=>'manage_settings'])
+@extends('cms::layouts.mTabs',['index'=>'manage_settings'])
 @section('tab')
     Notification
 @stop

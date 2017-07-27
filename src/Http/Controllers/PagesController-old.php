@@ -12,18 +12,18 @@
 namespace Sahakavatar\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Manage\Models\FrontendPage;
-use App\Modules\Users\User;
+use Sahakavatar\Manage\Models\FrontendPage;
+use Sahakavatar\User\User;
 use Illuminate\Http\Request;
-use App\helpers\helpers;
-use App\Modules\Settings\Models\Settings;
+use Sahakavatar\Cms\Helpers\helpers;
+use Sahakavatar\Settings\Models\Settings;
 use Illuminate\Support\Facades\Auth;
 use Input, Validator, View, Response;
 
 /**
  * Class PageController
  *
- * @package App\Modules\Tools\Http\Controllers
+ * @package Sahakavatar\Tools\Http\Controllers
  */
 class PagesControllerOLD extends Controller
 {

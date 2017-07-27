@@ -11,10 +11,10 @@
 
 namespace Sahakavatar\Manage\Models;
 
-use App\helpers\helpers;
+use Sahakavatar\Cms\Helpers\helpers;
 use Illuminate\Database\Eloquent\Model;
 
-//use App\Modules\Theme\SidebarTypes;
+//use Sahakavatar\Theme\SidebarTypes;
 class Corepage extends Model
 {
     protected $helpers;
@@ -49,7 +49,7 @@ class Corepage extends Model
 
     public function template ()
     {
-        return $this->belongsTo('App\Modules\Assets\Template', 'page_tpl');
+        return $this->belongsTo('Sahakavatar\Assets\Template', 'page_tpl');
     }
 
     public function customsidebar ()
@@ -59,7 +59,7 @@ class Corepage extends Model
 
     public function parent ()
     {
-        return $this->belongsTo('App\Modules\Create\Models\Corepage', 'parent_id');
+        return $this->belongsTo('Sahakavatar\Create\Models\Corepage', 'parent_id');
     }
 
     public function taxonomy ()
@@ -69,7 +69,7 @@ class Corepage extends Model
 
     public function groups ()
     {
-        return $this->belongsToMany('App\Modules\Users\Groups', 'page_groups', 'page_id', 'group_id');
+        return $this->belongsToMany('Sahakavatar\User\Groups', 'page_groups', 'page_id', 'group_id');
     }
 
     public function urlmanager ()
@@ -103,7 +103,7 @@ class Corepage extends Model
 
     public function members ()
     {
-        return $this->belongsToMany('App\Modules\Membership\Models\MemberGroups', 'pages_memberships_permissions', 'page_id', 'membership_id');
+        return $this->belongsToMany('Sahakavatar\Membership\Models\MemberGroups', 'pages_memberships_permissions', 'page_id', 'membership_id');
     }
 
     /**
@@ -152,7 +152,7 @@ class Corepage extends Model
 
     public function childs ()
     {
-        return $this->hasMany('App\Modules\Create\Models\Corepage', 'parent_id');
+        return $this->hasMany('Sahakavatar\Create\Models\Corepage', 'parent_id');
     }
 
     public function getPages ($parent_id = 0)

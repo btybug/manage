@@ -1,4 +1,4 @@
-@extends( 'layouts.admin' )
+@extends( 'cms::layouts.admin' )
 @section( 'content' )
     <div class="container-fluid">
         <div class="row row-eq-height ">
@@ -75,11 +75,11 @@
 @stop
 
 @section('CSS')
-    {!! HTML::style('/resources/assets/js/bootstrap-select/css/bootstrap-select.min.css') !!}
-    {!! HTML::style('/resources/assets/css/themes-settings.css') !!}
+    {!! HTML::style('js/bootstrap-select/css/bootstrap-select.min.css') !!}
+    {!! HTML::style('css/themes-settings.css') !!}
 
 @stop
 @section('JS')
-    {!! HTML::script('/resources/assets/js/bootstrap-select/js/bootstrap-select.min.js') !!}
-    {!! HTML::script('/resources/assets/js/event-setting.js') !!}
+    {!! HTML::script('js/bootstrap-select/js/bootstrap-select.min.js') !!}
+    {!! HTML::script('/js/events/event-setting.js') !!}
 @stop

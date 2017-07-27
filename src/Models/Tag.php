@@ -18,7 +18,7 @@ class Tag extends Model {
 	protected $fillable = ['name','page_id'];
 
 	public function pages(){
-		return $this->belongsToMany('App\Modules\Manage\Models\FrontendPage', 'frontend_pages_tags','tags_id','frontend_page_id','id');
+		return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'frontend_pages_tags','tags_id','frontend_page_id','id');
 	}
 
 	public static function boot() {

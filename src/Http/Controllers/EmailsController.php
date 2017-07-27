@@ -8,11 +8,11 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Setting;
-use App\Modules\Manage\Models\EmailGroups;
-use App\Modules\Manage\Models\Emails;
-use App\Modules\Modules\Models\Forms;
+use Illuminate\Routing\Controller;
+use Sahakavatar\Settings\Models\Settings;
+use Sahakavatar\Manage\Models\EmailGroups;
+use Sahakavatar\Manage\Models\Emails;
+use Sahakavatar\Modules\Models\Forms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;

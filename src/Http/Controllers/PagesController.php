@@ -11,18 +11,16 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\Core\CmsItemReader;
-use App\helpers\helpers;
+use Sahakavatar\Cms\Services\CmsItemReader;
+use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
-use App\Models\ContentLayouts\ContentLayouts;
-use App\Models\ContentLayouts\MainBody;
-use App\Models\Forms;
-use App\Modules\Manage\Models\Classifier;
-use App\Modules\Manage\Models\ClassifierItemPage;
-use App\Modules\Manage\Models\FrontendPage;
-use App\Modules\Modules\Models\Fields;
-use App\Modules\Settings\Models\Settings;
-use App\Modules\Users\User;
+use Sahakavatar\Cms\Models\ContentLayouts\MainBody;
+use Sahakavatar\Manage\Models\Classifier;
+use Sahakavatar\Manage\Models\ClassifierItemPage;
+use Sahakavatar\Manage\Models\FrontendPage;
+use Sahakavatar\Modules\Models\Fields;
+use Sahakavatar\Settings\Models\Settings;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Response;
@@ -32,7 +30,7 @@ use View;
 /**
  * Class PageController
  *
- * @package App\Modules\Tools\Http\Controllers
+ * @package Sahakavatar\Tools\Http\Controllers
  */
 class PagesController extends Controller
 {
@@ -72,6 +70,7 @@ class PagesController extends Controller
         $tags = [];
         $classifierPageRelations = [];
         $pages = FrontendPage::where('type', $type)->whereNull('parent_id')->get();
+
         if ($pageID) {
             $page = FrontendPage::find($pageID);
         } else {
@@ -82,8 +81,9 @@ class PagesController extends Controller
 
         $admins = User::admins()->pluck('username', 'id')->toArray();
         $classifies = Classifier::all();
+//        dd($page->id,ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get());
+//        if ($page) $classifierPageRelations = ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get();
 
-        if ($page) $classifierPageRelations = ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get();
         if ($page) $tags = $page->tags;
 
         return view('manage::frontend.pages.index', compact(['page', 'pages', 'admins', 'classifies', 'tags', 'cloudTags', 'type', 'classifierPageRelations']));

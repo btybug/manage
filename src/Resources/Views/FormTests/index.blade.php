@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('cms::layouts.admin')
 @section('content')
     @php
     $a= \App\ExtraModules\ProValidator\Models\Validations::find(1);

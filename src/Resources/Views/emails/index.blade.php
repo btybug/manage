@@ -1,4 +1,4 @@
-@extends( 'layouts.mTabs', [ 'index' => 'manage_emails' ] )
+@extends( 'cms::layouts.mTabs', [ 'index' => 'manage_emails' ] )
 @section( 'tab' )
 	<div class="container-fluid p-0 m-t-10">
 		<div class="col-md-3 p-l-0">
@@ -88,10 +88,10 @@
 
 
 @stop
-@include('_partials.delete_modal')
+@include('cms::_partials.delete_modal')
 @include('manage::emails._partial.datatable')
 @section( 'CSS' ) 
-{!!HTML::style( '/resources/assets/css/themes-settings.css' ) !!}
+{!!HTML::style( 'css/themes-settings.css' ) !!}
 @stop
 
 @section( 'JS' )

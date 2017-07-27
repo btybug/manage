@@ -11,19 +11,19 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\helpers\helpers;
+use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Urlmanager;
-use App\Modules\Manage\Models\Classifier;
-use App\Modules\Manage\Models\ClassifierItem;
-use App\Modules\Manage\Models\ClassifierItemPage;
-use App\Modules\Manage\Models\FrontendPage;
+use Sahakavatar\Manage\Models\Classifier;
+use Sahakavatar\Manage\Models\ClassifierItem;
+use Sahakavatar\Manage\Models\ClassifierItemPage;
+use Sahakavatar\Manage\Models\FrontendPage;
 use Datatables;
 use Illuminate\Http\Request;
 
 /**
  * Class ClassifyController
- * @package App\Modules\Create\Http\Controllers
+ * @package Sahakavatar\Create\Http\Controllers
  */
 class ClassifyController extends Controller
 {

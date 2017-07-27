@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('cms::layouts.admin')
 @section('content')
 
 {!! Form::model($menu,['url'=>'/admin/manage/frontend/menus/update' , 'class' => 'form-horizontal']) !!}

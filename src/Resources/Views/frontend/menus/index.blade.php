@@ -1,4 +1,4 @@
-@extends('layouts.mTabs',['index'=>'frontend_manage'])
+@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
     {!! HTML::style('app/Modules/Resources/Resources/assets/css/new-store.css') !!}
     <div class="row">

@@ -1,4 +1,4 @@
-@extends('layouts.mTabs',['index'=>'frontend_manage'])
+@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
     <div class="m-b-20 col-md-3 m-l-20">
         {!! Form::select('type',['core' => 'Core','plugin' => "Module",'custom' => 'Custom','classify' => 'Classify','tags' => 'Tags'],$type,['class' => 'form-control select-type']) !!}
@@ -67,7 +67,7 @@
         </article>
     </div>
 
-    @include('_partials.delete_modal')
+    @include('cms::cms::_partials.delete_modal')
 @stop
 {{--@include('tools::common_inc')--}}
 @section('CSS')

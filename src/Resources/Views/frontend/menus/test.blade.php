@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('cms::layouts.admin')
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -99,7 +99,7 @@
             @stop
 
             @section('JS')
-                {!! HTML::script('public/libs/nestedSortable/jquery.mjs.nestedSortable.js') !!}
+                {!! HTML::script('libs/nestedSortable/jquery.mjs.nestedSortable.js') !!}
 
                 <script>
 

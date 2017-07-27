@@ -19,7 +19,7 @@
 namespace Sahakavatar\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\helpers\Arrays;
+use Sahakavatar\Cms\Helpers\Arrays;
 
 
 class ClassifierItem extends Model {
@@ -37,22 +37,22 @@ class ClassifierItem extends Model {
 
     public function classifier(){
 
-        return $this->belongsTo('App\Modules\Manage\Models\Classifier', 'classifier_id', 'id');
+        return $this->belongsTo('Sahakavatar\Manage\Models\Classifier', 'classifier_id', 'id');
     }
 
     public function parent(){
 
-        return $this->belongsTo('App\Modules\Manage\Models\ClassifierItem', 'parent_id');
+        return $this->belongsTo('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
 
     }
 
     public function child(){
 
-        return $this->hasMany('App\Modules\Manage\Models\ClassifierItem', 'parent_id');
+        return $this->hasMany('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
     }
 
     public function page() {
-        return $this->belongsToMany('App\Modules\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
+        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
     }
 
     public function getParentPageSlug() {

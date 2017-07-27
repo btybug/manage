@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('cms::layouts.admin')
 @section('content')
     <div class="row">
         <div class="col-md-6">
@@ -44,7 +44,7 @@
                         <div id="collapseLink_create_terms1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingLink1">
                         <div class="panel-body panel_body panel_1 show">
                             <ol id="menus-list" class="sortable ui-sortable ui-droppable dvmin-height terms-box">
-                                {!! \App\Modules\Manage\Models\Classifier::RecursiveTerms($terms) !!}
+                                {!! \Sahakavatar\Manage\Models\Classifier::RecursiveTerms($terms) !!}
                             </ol>
                         </div>
                     </div>

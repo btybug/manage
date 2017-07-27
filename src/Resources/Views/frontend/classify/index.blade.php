@@ -1,4 +1,4 @@
-@extends('layouts.mTabs',['index'=>'frontend_manage'])
+@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
 
     <div class="up">

@@ -11,17 +11,17 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use App\helpers\helpers;
-use App\helpers\MainHelper as Helper;
+use Sahakavatar\Cms\Helpers\helpers;
+use Sahakavatar\Cms\Helpers\MainHelper as Helper;
 use App\Http\Controllers\Controller;
-use App\Repositories\AdminsettingRepository as Settings;
+use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
 use File;
 use Illuminate\Http\Request;
 use Validator;
 
 /**
  * Class SystemController
- * @package App\Modules\Settings\Http\Controllers
+ * @package Sahakavatar\Settings\Http\Controllers
  */
 class SystemController extends Controller
 {
@@ -199,7 +199,7 @@ class SystemController extends Controller
     public function getAdminemails ()
     {
         $emails = [];
-        $data = $this->settings->findAllBy('section', 'admin_emails')->toArray();
+        $data = $this->settings->getBy('section', 'admin_emails')->toArray();
         foreach ($data as $rs) {
             $emails[$rs['settingkey']] = $rs['val'];
         }
