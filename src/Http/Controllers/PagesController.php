@@ -15,15 +15,20 @@ use Sahakavatar\Cms\Services\CmsItemReader;
 use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
 use Sahakavatar\Cms\Models\ContentLayouts\MainBody;
+use Sahakavatar\Console\Repository\FrontPagesRepository;
 use Sahakavatar\Manage\Models\Classifier;
 use Sahakavatar\Manage\Models\ClassifierItemPage;
 use Sahakavatar\Manage\Models\FrontendPage;
+use Sahakavatar\Manage\Repository\ClassifierRepository;
+use Sahakavatar\Manage\Services\FrontendPageService;
 use Sahakavatar\Modules\Models\Fields;
 use Sahakavatar\Settings\Models\Settings;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Response;
+use Sahakavatar\Manage\Services\ClassifierService;
+use Sahakavatar\User\Services\UserService;
 use Validator;
 use View;
 
@@ -63,61 +68,65 @@ class PagesController extends Controller
      * @param string $type
      * @return View
      */
-    public function getIndex(Request $request)
+    public function getIndex(
+        Request $request,
+        FrontPagesRepository $frontPagesRepository,
+        UserService $userService,
+        ClassifierRepository $classifierRepository
+    )
     {
         $pageID = $request->get('p');
         $type = $request->get('type', 'core');
         $tags = [];
         $classifierPageRelations = [];
-        $pages = FrontendPage::where('type', $type)->whereNull('parent_id')->get();
+        $pages = $frontPagesRepository->findAllByMultiple([
+            'type' => $type,
+            'parent_id' => NULL
+        ]);
 
         if ($pageID) {
-            $page = FrontendPage::find($pageID);
+            $page = $frontPagesRepository->find($pageID);
         } else {
-            $page = FrontendPage::where('type', $type)->first();
+            $page = $frontPagesRepository->findBy('type', $type);
         }
 
         if ($page && !$page->page_section) $page->page_section = 0;
 
-        $admins = User::admins()->pluck('username', 'id')->toArray();
-        $classifies = Classifier::all();
-//        dd($page->id,ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get());
+        $admins = $userService->getAdmins()->pluck('username', 'id')->toArray();
+        $classifies = $classifierRepository->getAll();
 //        if ($page) $classifierPageRelations = ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get();
 
         if ($page) $tags = $page->tags;
 
-        return view('manage::frontend.pages.index', compact(['page', 'pages', 'admins', 'classifies', 'tags', 'cloudTags', 'type', 'classifierPageRelations']));
+        return view('manage::frontend.pages.index', compact(['page', 'pages', 'admins', 'classifies', 'tags', 'type', 'classifierPageRelations']));
     }
 
-    public function getSettings($id)
+    public function getSettings(
+        Request $request,
+        FrontPagesRepository $frontPagesRepository,
+        UserService $userService,
+        ClassifierRepository $classifierRepository,
+        ClassifierService $classifierService
+    )
     {
-        $page = FrontendPage::find($id);
-        $admins = User::admins()->pluck('username', 'id')->toArray();
+        $id = $request->id;
+        $page = $frontPagesRepository->find($id);
+        $admins = $userService->getAdmins()->pluck('username', 'id')->toArray();
         $tags = $page->tags;
-        $classifies = Classifier::all();
-        $classifierPageRelations = ClassifierItemPage::where('front_page_id', $page->id)->groupBy('classifier_id')->get();
+        $classifies = $classifierRepository->getAll();
+        $classifierPageRelations = $classifierService->getClassifierPageRelations($page->id);
         return view('manage::frontend.pages.settings', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations']));
     }
 
-    public function postSettings(Request $request)
+    public function postSettings(
+        Request $request,
+        FrontendPageService $frontendPageService
+
+    )
     {
-        $page = FrontendPage::find($request->id);
-        if (!$page) {
-            abort(404);
-        }
-        $page->page_layout = $request->page_section ? $request->page_section : NULL;
-        $page->page_layout_settings = $request->get('placeholders')
-            ? $request->get('placeholders') : NULL;
-        $page->header = $request->header;
-        $page->footer = $request->footer;
-        $page->url = $request->url;
-        $page->title = $request->title;
-        $page->status = $request->status;
-        $page->page_access = $request->page_access;
-        $page->main_content = $request->main_content;
-        $page->save();
-        if(isset($request->redirect_type) && $request->redirect_type == 'view') {
-            return redirect('/admin/manage/frontend/pages/page-test-preview/'.$page->id."?pl_live_settings=page_live&pl=" . $page->page_layout . '&' . $page->getPlaceholdersInUrl());
+        $updatedPage = $frontendPageService->saveSettings($request);
+        if (isset($request->redirect_type) && $request->redirect_type == 'view') {
+            return redirect('/admin/manage/frontend/pages/page-test-preview/' . $updatedPage->id . "?pl_live_settings=page_live&pl=" . $updatedPage->page_layout . '&' . $frontendPageService->getPlaceholdersInUrl($updatedPage->page_layout_settings));
         }
         return redirect()->back()->with('message', 'Page settings has been saved successfully.');
     }
@@ -158,20 +167,23 @@ class PagesController extends Controller
         return Response::json(['error' => false]);
     }
 
-    public function postNew(Request $request)
+    public function postNew(
+        FrontendPageService $frontendPageService
+    )
     {
-        $new = FrontendPage::addNewPage();
-
-        if ($new) return redirect()->to($this->home . '?type=custom')->with('message', 'Congratulations: New Page Created Successfully');
+        $new = $frontendPageService->addNewPage();
+        if ($new) return redirect()->to('/admin/manage/frontend/pages' . '?type=custom')->with('message', 'Congratulations: New Page Created Successfully');
 
         return redirect()->back()->with('message', 'Page not Created');
     }
 
-    public function getAddChild($parent_id)
+    public function getAddChild(
+        Request $request,
+        FrontendPageService $frontendPageService
+    )
     {
-        $new = FrontendPage::addNewPage($parent_id);
-
-        if ($new) return redirect()->to($this->home . '?type=custom')->with('message', 'Congratulations: New Page Created Successfully');
+        $new = $frontendPageService->addNewPage($request->parent_id);
+        if ($new) return redirect()->to('/admin/manage/frontend/pages' . '?type=custom')->with('message', 'Congratulations: New Page Created Successfully');
 
         return redirect()->back()->with('message', 'Page not Created');
     }
@@ -450,7 +462,7 @@ class PagesController extends Controller
 
         if ($v->fails()) return \Response::json(['error' => true, 'message' => $v->messages()]);
         if ($page) {
-            $page->page_layout_settings = (!empty($pageLayoutSettings))  ? $pageLayoutSettings : null;
+            $page->page_layout_settings = (!empty($pageLayoutSettings)) ? $pageLayoutSettings : null;
             $page->page_layout = $layout_id ? $layout_id : NULL;
             $page->save();
             return \Response::json(['error' => false, 'message' => 'Page Layout settings Successfully assigned', 'url' => url('admin/manage/frontend/pages/settings', [$page->id])]);
@@ -463,16 +475,16 @@ class PagesController extends Controller
     {
         $form = Forms::find($request->get('id'));
 
-        if($form){
-            if($form->form_type == 'user'){
-                $fields = Fields::where('table_name',$form->fields_type)->where('status', Fields::ACTIVE)->where('available_for_users',1)->get()->toArray();
-            }else{
-                $fields = Fields::where('table_name',$form->fields_type)->where('status', Fields::ACTIVE)->get()->toArray();
+        if ($form) {
+            if ($form->form_type == 'user') {
+                $fields = Fields::where('table_name', $form->fields_type)->where('status', Fields::ACTIVE)->where('available_for_users', 1)->get()->toArray();
+            } else {
+                $fields = Fields::where('table_name', $form->fields_type)->where('status', Fields::ACTIVE)->get()->toArray();
             }
-            
+
             return \Response::json(['fields' => $fields]);
         }
 
-        return \Response::json(['error' => true,'message' => 'Form not found']);
+        return \Response::json(['error' => true, 'message' => 'Form not found']);
     }
 }

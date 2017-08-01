@@ -243,41 +243,41 @@ class FrontendPage extends Model
         return self::where('module_id',$module->slug)->where('parent_id',NULL)->get();
     }
 
-    public static function addNewPage($parentID = null)
-    {
-        $parent = null;
-        if($parentID){
-            $parent = self::find($parentID);
-            if(! $parent){
-                return false;
-            }
-        }
-
-        $header_enabled = Settings::where('settingkey', 'header_enabled')->first();
-        $footer_enabled = Settings::where('settingkey', 'footer_enabled')->first();
-        $defaultPageLayout = Settings::where('settingkey', 'frontend_page_section')->first();
-        $slug = uniqid();
-        $new = self::create([
-            'user_id' => \Auth::id(),
-            'title' => 'New Page',
-            'slug' => $slug,
-            'header' => ($header_enabled) ? $header_enabled->val : 0,
-            'footer' => ($footer_enabled) ? $footer_enabled->val : 0,
-            'page_layout' => $defaultPageLayout->val,
-            'url' => '',
-            'parent_id' => ($parent) ? $parent->id : null,
-            'type' => 'custom'
-        ]);
-        $new->update([
-            'url' => '/new-page(' . $new->id . ')',
-        ]);
-
-        return $new;
-    }
-
-    public function getPlaceholdersInUrl() {
-        if($this->page_layout_settings) {
-            return http_build_query($this->page_layout_settings);
-        }
-    }
+//    public static function addNewPage($parentID = null)
+//    {
+//        $parent = null;
+//        if($parentID){
+//            $parent = self::find($parentID);
+//            if(! $parent){
+//                return false;
+//            }
+//        }
+//
+//        $header_enabled = Settings::where('settingkey', 'header_enabled')->first();
+//        $footer_enabled = Settings::where('settingkey', 'footer_enabled')->first();
+//        $defaultPageLayout = Settings::where('settingkey', 'frontend_page_section')->first();
+//        $slug = uniqid();
+//        $new = self::create([
+//            'user_id' => \Auth::id(),
+//            'title' => 'New Page',
+//            'slug' => $slug,
+//            'header' => ($header_enabled) ? $header_enabled->val : 0,
+//            'footer' => ($footer_enabled) ? $footer_enabled->val : 0,
+//            'page_layout' => $defaultPageLayout->val,
+//            'url' => '',
+//            'parent_id' => ($parent) ? $parent->id : null,
+//            'type' => 'custom'
+//        ]);
+//        $new->update([
+//            'url' => '/new-page(' . $new->id . ')',
+//        ]);
+//
+//        return $new;
+//    }
+//
+//    public function getPlaceholdersInUrl() {
+//        if($this->page_layout_settings) {
+//            return http_build_query($this->page_layout_settings);
+//        }
+//    }
 }

@@ -183,7 +183,7 @@
                         </div>
                     </div>
                 </div>
-            {!! \Layouts::getPageLayoutPlaceholders($page) !!}
+            {!! \Sahakavatar\Cms\Models\Layouts::getPageLayoutPlaceholders($page) !!}
                 {{--<div class="panel panel-default custompanel m-t-20">--}}
                     {{--<div class="panel-heading">Select Page Layout</div>--}}
                     {{--<div class="panel-body">--}}
@@ -215,7 +215,7 @@
 @endif
 
 @section('CSS')
-    {!! HTML::style('/resources/assets/css/create_pages.css') !!}
+    {!! HTML::style('/css/create_pages.css') !!}
     <style>
         #main-wrapper {
             min-height: 1000px;
@@ -243,10 +243,10 @@
     </style>
 @stop
 @section('JS')
-    {!! HTML::script("resources/assets/js/UiElements/bb_styles.js?v.5") !!}
-    {!! HTML::script('/resources/assets/js/page-setting.js') !!}
-    {!! HTML::script("resources/assets/js/UiElements/bb_div.js?v.5") !!}
-    {!! HTML::script('/resources/assets/js/tinymice/tinymce.min.js') !!}
+    {!! HTML::script("/js/UiElements/bb_styles.js?v.5") !!}
+    {!! HTML::script('/js/page-setting.js') !!}
+    {!! HTML::script("/js/UiElements/bb_div.js?v.5") !!}
+    {!! HTML::script('/js/tinymice/tinymce.min.js') !!}
     <script>
 
         $(document).ready(function () {
