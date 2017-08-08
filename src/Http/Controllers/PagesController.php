@@ -106,7 +106,8 @@ class PagesController extends Controller
         FrontPagesRepository $frontPagesRepository,
         UserService $userService,
         ClassifierRepository $classifierRepository,
-        ClassifierService $classifierService
+        ClassifierService $classifierService,
+        FrontendPageService $frontendPageService
     )
     {
         $id = $request->id;
@@ -115,7 +116,8 @@ class PagesController extends Controller
         $tags = $page->tags;
         $classifies = $classifierRepository->getAll();
         $classifierPageRelations = $classifierService->getClassifierPageRelations($page->id);
-        return view('manage::frontend.pages.settings', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations']));
+        $placeholders = $frontendPageService->getPlaceholdersInUrl($page->page_layout_settings);
+        return view('manage::frontend.pages.settings', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders']));
     }
 
     public function postSettings(
@@ -136,14 +138,17 @@ class PagesController extends Controller
         return view('manage::frontend.pages.general', compact('id'));
     }
 
-    public function postData(Request $request)
+    public function postData(
+        Request $request,
+        FrontPagesRepository $frontPagesRepository,
+        UserService $userService
+    )
     {
         $id = $request->id;
-        if ($page = FrontendPage::find($id)) {
+        if ($page = $frontPagesRepository->find($id)) {
             if ($page && !$page->page_section) $page->page_section = 0;
-            $admins = User::admins()->pluck('username', 'id')->toArray();
+            $admins = $userService->getAdmins()->pluck('username', 'id')->toArray();
             $html = View("manage::frontend.pages._partials.page-data", compact(['html', 'page', 'admins']))->render();
-
             return \Response::json(['error' => false, 'html' => $html]);
         }
         return \Response::json(['error' => true]);
@@ -154,12 +159,16 @@ class PagesController extends Controller
         return Response::json(['url' => BBGetUserAvatar($request->id)]);
     }
 
-    public function postClassify(Request $request)
+    public function postClassify(
+        Request $request,
+        ClassifierRepository $classifierRepository,
+        ClassifierService $classifierService
+    )
     {
-        $classify = Classifier::find($request->id);
+        $classify = $classifierRepository->find($request->id);
         $type = $request->type;
         if ($classify) {
-            $termsList = $classify->classifierItem()->pluck('title', 'id')->toArray();
+            $termsList = $classifierService->classifierItems();
             $html = View('manage::frontend.pages._partials.classify-items', compact(['termsList', 'classify', 'type']))->render();
 
             return Response::json(['error' => false, 'html' => $html]);
@@ -188,163 +197,164 @@ class PagesController extends Controller
         return redirect()->back()->with('message', 'Page not Created');
     }
 
-    public function postEdit(Request $request)
+//    public function postEdit(Request $request)
+//    {
+//          TODO delete if necessary
+//        $data = $request->except('_token', 'type', 'tags', 'classify');
+//        $validator = Validator::make($data, [
+//            'id' => 'exists:frontend_pages,id',
+//            'title' => 'required',
+//            'url' => 'required|unique:frontend_pages,url,' . $data['id']
+//        ]);
+//
+//        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
+//
+//        if (isset($data['url'])) {
+//            (starts_with($data['url'], '/')) ? false : $data['url'] = "/" . $data['url'];
+//        }
+//
+//        $page = FrontendPage::find($data['id']);
+//        if (!$page) return redirect()->back()->with('message', 'Page Not Found!!!');
+//
+//        $data['edited_by'] = Auth::id();
+//        $page->update($data);
+//        FrontendPage::addTags($request->tags, $page->id);
+//        ClassifierItemPage::createClassifierPageRelations($request->classify, $page->id);
+//
+//        return redirect()->back()->with('message', 'Successfully Updated Page');
+//    }
+
+//    public function postDetach(Request $request)
+//    {
+//        $slug = $request->slug;
+//        $data = explode('.', $slug);
+//
+//        if ($page = FrontendPage::find($data[1])) {
+//            try {
+//                $page->tags()->detach($data[0]);
+//            } catch (\Exception $e) {
+//                return \Response::json(['success' => false, 'url' => back()]);
+//            }
+//
+//            return \Response::json(['success' => true, 'url' => back()]);
+//        }
+//
+//        return \Response::json(['success' => false, 'url' => back()]);
+//    }
+
+    public function postDelete(
+        Request $request,
+        FrontPagesRepository $frontPagesRepository
+    )
     {
-        $data = $request->except('_token', 'type', 'tags', 'classify');
-        $validator = Validator::make($data, [
-            'id' => 'exists:frontend_pages,id',
-            'title' => 'required',
-            'url' => 'required|unique:frontend_pages,url,' . $data['id']
-        ]);
-
-        if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
-
-        if (isset($data['url'])) {
-            (starts_with($data['url'], '/')) ? false : $data['url'] = "/" . $data['url'];
-        }
-
-        $page = FrontendPage::find($data['id']);
-        if (!$page) return redirect()->back()->with('message', 'Page Not Found!!!');
-
-        $data['edited_by'] = Auth::id();
-        $page->update($data);
-        FrontendPage::addTags($request->tags, $page->id);
-        ClassifierItemPage::createClassifierPageRelations($request->classify, $page->id);
-
-        return redirect()->back()->with('message', 'Successfully Updated Page');
-    }
-
-    public function postDetach(Request $request)
-    {
-        $slug = $request->slug;
-        $data = explode('.', $slug);
-
-        if ($page = FrontendPage::find($data[1])) {
-            try {
-                $page->tags()->detach($data[0]);
-            } catch (\Exception $e) {
-                return \Response::json(['success' => false, 'url' => back()]);
-            }
-
-            return \Response::json(['success' => true, 'url' => back()]);
-        }
-
-        return \Response::json(['success' => false, 'url' => back()]);
-    }
-
-    public function postDelete(Request $request)
-    {
-        $page = FrontendPage::find($request->slug);
-
-        if (!$page) abort(500);
-
-        $result = $page->delete();
+        $page = $frontPagesRepository->find($request->slug);
+        $result = $frontPagesRepository->delete($page->id);
 
         return \Response::json(['success' => true, 'message' => "Page successfully deleted"]);
     }
 
 
-    public function getPreview($layout_id = null, $page_id = null)
-    {
-        $side_bars = [];
-        if (!$layout_id) {
-            return null;
-        }
-
-        $layout = $this->page->getLayout($layout_id);
-        // Include Configuration files
-        $assets = [
-            'header' => [
-                'bootstrap'
-            ],
-            'footer' => []
-        ];
-        // Assets Rendering
-        if (isset($assets['header'])) {
-            Assets::registerCollection('header', $assets['header']);
-        }
-
-        if (isset($assets['footer'])) {
-            Assets::registerCollection('footer', $assets['footer']);
-        }
-
-        $customiser_css = '';
-        $preview_class = 'studioifream';
-
-        if ($page_id != null) {
-            $side_bars = $this->page->getPageSideBars($page_id);
-        }
-
-        $header = BBactiveHeader();
-        $footer = BBactiveFooter();
-
-        $sidebar1 = (isset($side_bars['sidebar1'])) ? $side_bars['sidebar1'] : 'Sidebar 1';
-        $sidebar2 = (isset($side_bars['sidebar2'])) ? $side_bars['sidebar2'] : 'Sidebar 2';
-        $content = 'Content';
-
-
-        //dd($side_bars);
-        return view(
-            'layouts.preview',
-            compact(
-                [
-                    'layout',
-                    'customiser_css',
-                    'header',
-                    'footer',
-                    'sidebar1',
-                    'sidebar2',
-                    'content',
-                    'preview_class',
-                    'side_bars'
-                ]
-            )
-        );
-    }
+//    public function getPreview($layout_id = null, $page_id = null)
+//    {
+//        $side_bars = [];
+//        if (!$layout_id) {
+//            return null;
+//        }
+//
+//        $layout = $this->page->getLayout($layout_id);
+//        // Include Configuration files
+//        $assets = [
+//            'header' => [
+//                'bootstrap'
+//            ],
+//            'footer' => []
+//        ];
+//        // Assets Rendering
+//        if (isset($assets['header'])) {
+//            Assets::registerCollection('header', $assets['header']);
+//        }
+//
+//        if (isset($assets['footer'])) {
+//            Assets::registerCollection('footer', $assets['footer']);
+//        }
+//
+//        $customiser_css = '';
+//        $preview_class = 'studioifream';
+//
+//        if ($page_id != null) {
+//            $side_bars = $this->page->getPageSideBars($page_id);
+//        }
+//
+//        $header = BBactiveHeader();
+//        $footer = BBactiveFooter();
+//
+//        $sidebar1 = (isset($side_bars['sidebar1'])) ? $side_bars['sidebar1'] : 'Sidebar 1';
+//        $sidebar2 = (isset($side_bars['sidebar2'])) ? $side_bars['sidebar2'] : 'Sidebar 2';
+//        $content = 'Content';
+//
+//
+//        //dd($side_bars);
+//        return view(
+//            'layouts.preview',
+//            compact(
+//                [
+//                    'layout',
+//                    'customiser_css',
+//                    'header',
+//                    'footer',
+//                    'sidebar1',
+//                    'sidebar2',
+//                    'content',
+//                    'preview_class',
+//                    'side_bars'
+//                ]
+//            )
+//        );
+//    }
 
     /**
      * @param Request $request
      * @return array
      */
-    public function postAddchild(Request $request)
-    {
-        $theme = Themes::active()->getActiveLayout();
-        $data = $request->all();
-        $data['layout_id'] = $theme['key'];
-        $rs = $this->page->Addchild($data);
-        if ($rs['code'] == '401') {
-            return redirect()->back()
-                ->withErrors($rs['errors'])
-                ->withInput();
-        } else {
-            $page = $rs['page'];
-            $this->helpers->updatesession('Page Added Successfully!', 'alert-success');
-
-            return redirect($this->home . "/update/" . $page->id);
-        }
-    }
+//    public function postAddchild(Request $request)
+//    {
+//        $theme = Themes::active()->getActiveLayout();
+//        $data = $request->all();
+//        $data['layout_id'] = $theme['key'];
+//        $rs = $this->page->Addchild($data);
+//        if ($rs['code'] == '401') {
+//            return redirect()->back()
+//                ->withErrors($rs['errors'])
+//                ->withInput();
+//        } else {
+//            $page = $rs['page'];
+//            $this->helpers->updatesession('Page Added Successfully!', 'alert-success');
+//
+//            return redirect($this->home . "/update/" . $page->id);
+//        }
+//    }
 
     /**
      * @param Request $request
      * @return mixed
      */
-    public function postChangeparent(Request $request)
-    {
-        $req = $request->all();
-        $parent_id = ($req['item_parent_id'] != 'undefined') ? $req['item_parent_id'] : '0';
-        $pag_id = $req['item_id'];
-
-        $page = $this->page->find($pag_id);
-        $parent_page = $this->page->find($parent_id);
-        if ($parent_page->code == 'home') {
-            $new_url = "home/" . class_basename($page->view_url);
-        } else {
-            $new_url = $parent_page['view_url'] . "/" . class_basename($page->view_url);
-        }
-        $page = $this->page->updateRich(['parent_id' => $parent_id, 'view_url' => $new_url], $pag_id);
-
-        return $this->page->find($pag_id);
-    }
+//    public function postChangeparent(Request $request)
+//    {
+//        $req = $request->all();
+//        $parent_id = ($req['item_parent_id'] != 'undefined') ? $req['item_parent_id'] : '0';
+//        $pag_id = $req['item_id'];
+//
+//        $page = $this->page->find($pag_id);
+//        $parent_page = $this->page->find($parent_id);
+//        if ($parent_page->code == 'home') {
+//            $new_url = "home/" . class_basename($page->view_url);
+//        } else {
+//            $new_url = $parent_page['view_url'] . "/" . class_basename($page->view_url);
+//        }
+//        $page = $this->page->updateRich(['parent_id' => $parent_id, 'view_url' => $new_url], $pag_id);
+//
+//        return $this->page->find($pag_id);
+//    }
 
     /**
      * @param Request $request
@@ -352,6 +362,7 @@ class PagesController extends Controller
      */
     public function postCreate(Request $request)
     {
+        //TODO delete if needed
         $req = $request->all();
         unset($req['_token']);
         $validator = Validator::make(
@@ -379,6 +390,7 @@ class PagesController extends Controller
      */
     public function getUpdate($id)
     {
+        //TODO delete if needed
         $data = $this->page->getPage($id);
         return view('create::front_pages.edit', $data);
     }

@@ -27,17 +27,17 @@
 @stop
 
 @section('CSS')
-    {!! HTML::style('resources/assets/css/create_pages.css') !!}
-    {!! HTML::style('/resources/assets/css/preview-template.css') !!}
-    {!! HTML::style("resources/assets/js/animate/css/animate.css") !!}
-    {!! HTML::style("resources/assets/css/preview-template.css") !!}
+    {!! HTML::style('css/create_pages.css') !!}
+    {!! HTML::style('css/preview-template.css') !!}
+    {!! HTML::style("/js/animate/css/animate.css") !!}
+    {!! HTML::style("/css/preview-template.css") !!}
 @stop
 
 @section('JS')
-    {!! HTML::script("resources/assets/js/html2canvas/js/html2canvas.js") !!}
-    {!! HTML::script("resources/assets/js/canvas2image/js/canvas2image.js") !!}
-    {!! HTML::script("resources/assets/js/bootbox/js/bootbox.min.js") !!}
-    {!! HTML::script("resources/assets/js/UiElements/ui-page-preview-setting.js") !!}
+    {!! HTML::script("js/html2canvas/js/html2canvas.js") !!}
+    {!! HTML::script("js/canvas2image/js/canvas2image.js") !!}
+    {!! HTML::script("js/bootbox/js/bootbox.min.js") !!}
+    {!! HTML::script("js/UiElements/ui-page-preview-setting.js") !!}
 
 
     <script>

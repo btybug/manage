@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
             <div class="pull-right">
-                <a data-href="{!! url('/admin/manage/frontend/pages/page-test-preview/'.$page->id."?pl_live_settings=page_live&pl=" . $page->page_layout . '&' . $page->getPlaceholdersInUrl()) !!}"  class="live-preview-btn"  ><i
+                <a data-href="{!! url('/admin/manage/frontend/pages/page-test-preview/'.$page->id."?pl_live_settings=page_live&pl=" . $page->page_layout . '&' . $placeholders) !!}"  class="live-preview-btn"  ><i
                             class="fa fa-eye" aria-hidden="true"></i> View
                 </a>
                 {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn')) }}

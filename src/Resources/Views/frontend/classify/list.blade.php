@@ -124,12 +124,12 @@
     @include('resources::assests.magicModal')
 @stop
 @section('CSS')
-    {!! HTML::style('/resources/assets/css/create_pages.css') !!}
-    {!! HTML::style('/resources/assets/css/menu.css?v=0.16') !!}
-    {!! HTML::style('/resources/assets/css/tool-css.css?v=0.23') !!}
-    {!! HTML::style('/resources/assets/css/page.css?v=0.15') !!}
-    {!! HTML::style('/resources/assets/css/admin_pages.css') !!}
-    {!! HTML::style('/resources/assets/js/tag-it/css/jquery.tagit.css') !!}
+    {!! HTML::style('css/create_pages.css') !!}
+    {!! HTML::style('css/menu.css?v=0.16') !!}
+    {!! HTML::style('css/tool-css.css?v=0.23') !!}
+    {!! HTML::style('css/page.css?v=0.15') !!}
+    {!! HTML::style('css/admin_pages.css') !!}
+    {!! HTML::style('js/tag-it/css/jquery.tagit.css') !!}
 <style>
     .page_labels {
         overflow: hidden;
@@ -143,13 +143,13 @@
 </style>
 @stop
 @section('JS')
-    {!! HTML::script('resources/assets/js/create_pages.js') !!}
+    {!! HTML::script('js/create_pages.js') !!}
     {!! HTML::script("/resources/assets/js/UiElements/bb_styles.js?v.5") !!}
-    {!! HTML::script('resources/assets/js/admin_pages.js') !!}
-    {!! HTML::script('/resources/assets/js/nestedSortable/jquery.mjs.nestedSortable.js') !!}
-    {!! HTML::script('/resources/assets/js/bootbox/js/bootbox.min.js') !!}
-    {!! HTML::script('/resources/assets/js/icon-plugin.js?v=0.4') !!}
-    {!! HTML::script('/resources/assets/js/tag-it/js/tag-it.js') !!}
+    {!! HTML::script('js/admin_pages.js') !!}
+    {!! HTML::script('js/nestedSortable/jquery.mjs.nestedSortable.js') !!}
+    {!! HTML::script('js/bootbox/js/bootbox.min.js') !!}
+    {!! HTML::script('js/icon-plugin.js?v=0.4') !!}
+    {!! HTML::script('js/tag-it/js/tag-it.js') !!}
 
     <script>
         $(document).ready(function () {

@@ -287,8 +287,8 @@
     </style>
 @stop
 @section( 'JS' )
-    {!! HTML::script('/resources/assets/js/tinymice/tinymce.min.js') !!}
-    {!! HTML::script('/resources/assets/js/tag-it/js/tag-it.js') !!}
+    {!! HTML::script('js/tinymice/tinymce.min.js') !!}
+    {!! HTML::script('js/tag-it/js/tag-it.js') !!}
     <script>
         tinymce.init({
             selector: 'textarea#contentEditor',

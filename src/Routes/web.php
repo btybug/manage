@@ -65,7 +65,7 @@ Route::group(['prefix' => 'frontend'],function () {
     Route::group(['prefix' => 'pages'],function () {
         //front pages
         Route::get('/', 'PagesController@getIndex');
-        Route::post('/', 'PagesController@postEdit');
+//        Route::post('/', 'PagesController@postEdit'); TODO delete
         Route::get('/settings/{id}', 'PagesController@getSettings');
         Route::post('/settings/{id}', 'PagesController@postSettings');
         Route::get('/general/{id}', 'PagesController@getGeneral');

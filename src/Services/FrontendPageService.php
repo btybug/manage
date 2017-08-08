@@ -78,7 +78,7 @@ class FrontendPageService extends GeneralService
         return $new;
     }
 
-    public function getPlaceholdersInUrl(array $pageLayoutSettings)
+    public function getPlaceholdersInUrl(array $pageLayoutSettings = null)
     {
         if ($pageLayoutSettings) {
             return http_build_query($pageLayoutSettings);
