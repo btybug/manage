@@ -67,19 +67,15 @@ class GeneralController extends Controller
      */
     public function postSettings (Request $request)
     {
-
         $input = $request->except('_token');
         if ($request->file('site_logo')) {
             File::cleanDirectory('resources/assets/images/logo/');
             $name = $request->file('site_logo')->getClientOriginalName();
             $request->file('site_logo')->move('resources/assets/images/logo/', $name);
-
             $input['site_logo'] = $name;
         }
-
-//        $this->settings->updateSystemSettings($input);
+        $this->settings->updateSystemSettings($input);
         $this->helpers->updatesession('System successfully saved');
-
         return redirect()->back();
     }
 }

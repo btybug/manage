@@ -11,8 +11,6 @@
 |
 */
 
-//dd(\Subscriber::getSubscriptions());
-//event(new \App\Events\CustomEvent());
 Route::get('/', function() {
     return view("manage::index");
 });
@@ -66,7 +64,7 @@ Route::group(['prefix' => 'frontend'],function () {
         //front pages
         Route::get('/', 'PagesController@getIndex');
 //        Route::post('/', 'PagesController@postEdit'); TODO delete
-        Route::get('/settings/{id}', 'PagesController@getSettings');
+        Route::get('/settings/{param}', 'PagesController@getSettings');
         Route::post('/settings/{id}', 'PagesController@postSettings');
         Route::get('/general/{id}', 'PagesController@getGeneral');
         Route::post('/user-avatar', 'PagesController@postUserAvatar');

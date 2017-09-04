@@ -11,23 +11,19 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use Sahakavatar\Cms\Services\CmsItemReader;
-use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Response;
+use Sahakavatar\Cms\Helpers\helpers;
 use Sahakavatar\Cms\Models\ContentLayouts\MainBody;
+use Sahakavatar\Cms\Services\CmsItemReader;
 use Sahakavatar\Console\Repository\FrontPagesRepository;
-use Sahakavatar\Manage\Models\Classifier;
-use Sahakavatar\Manage\Models\ClassifierItemPage;
 use Sahakavatar\Manage\Models\FrontendPage;
 use Sahakavatar\Manage\Repository\ClassifierRepository;
+use Sahakavatar\Manage\Services\ClassifierService;
 use Sahakavatar\Manage\Services\FrontendPageService;
 use Sahakavatar\Modules\Models\Fields;
 use Sahakavatar\Settings\Models\Settings;
-use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Response;
-use Sahakavatar\Manage\Services\ClassifierService;
 use Sahakavatar\User\Services\UserService;
 use Validator;
 use View;
@@ -110,6 +106,27 @@ class PagesController extends Controller
         FrontendPageService $frontendPageService
     )
     {
+        $units = CmsItemReader::getAllGearsByType('units')->sortByTag('test');
+        $id = $request->param;
+        $page = $frontPagesRepository->find($id);
+        $admins = $userService->getAdmins()->pluck('username', 'id')->toArray();
+        $tags = $page->tags;
+        $classifies = $classifierRepository->getAll();
+        $classifierPageRelations = $classifierService->getClassifierPageRelations($page->id);
+        $placeholders = $frontendPageService->getPlaceholdersInUrl($page->page_layout_settings);
+
+        return view('manage::frontend.pages.settings', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders']));
+    }
+
+    public function getGeneral(
+        Request $request,
+        FrontPagesRepository $frontPagesRepository,
+        UserService $userService,
+        ClassifierRepository $classifierRepository,
+        ClassifierService $classifierService,
+        FrontendPageService $frontendPageService
+    )
+    {
         $id = $request->id;
         $page = $frontPagesRepository->find($id);
         $admins = $userService->getAdmins()->pluck('username', 'id')->toArray();
@@ -117,26 +134,23 @@ class PagesController extends Controller
         $classifies = $classifierRepository->getAll();
         $classifierPageRelations = $classifierService->getClassifierPageRelations($page->id);
         $placeholders = $frontendPageService->getPlaceholdersInUrl($page->page_layout_settings);
-        return view('manage::frontend.pages.settings', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders']));
+        return view('manage::frontend.pages.general', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders']));
     }
 
-    public function postSettings(
-        Request $request,
-        FrontendPageService $frontendPageService
-
-    )
+    public function postSettings(Request $request, FrontendPageService $frontendPageService)
     {
         $updatedPage = $frontendPageService->saveSettings($request);
         if (isset($request->redirect_type) && $request->redirect_type == 'view') {
-            return redirect('/admin/manage/frontend/pages/page-test-preview/' . $updatedPage->id . "?pl_live_settings=page_live&pl=" . $updatedPage->page_layout . '&' . $frontendPageService->getPlaceholdersInUrl($updatedPage->page_layout_settings));
+            return redirect('/admin/manage/frontend/pages/page-test-preview/'
+                . $updatedPage->id . "?pl_live_settings=page_live&pl="
+                . $updatedPage->page_layout
+                . '&'
+                . $frontendPageService->getPlaceholdersInUrl($updatedPage->page_layout_settings)
+                .'&content_type='.$request->get('content_type').'&template='.$request->get('template'));
         }
         return redirect()->back()->with('message', 'Page settings has been saved successfully.');
     }
 
-    public function getGeneral($id)
-    {
-        return view('manage::frontend.pages.general', compact('id'));
-    }
 
     public function postData(
         Request $request,
@@ -454,6 +468,7 @@ class PagesController extends Controller
         $settings = $request->except('_token');
         $settings['main_content'] = $page->main_content;
         $data = compact(['page_id', 'layout', 'page', 'url', 'layouts', 'isLivePreview', 'main_views', 'main_view', 'settings']);
+
         return view('manage::frontend.pages.page-test-preview', compact('settings', 'data'));
     }
 

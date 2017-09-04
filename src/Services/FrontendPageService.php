@@ -33,17 +33,15 @@ class FrontendPageService extends GeneralService
     )
     {
         $page = $this->frontPagesRepository->findOrFail($request->id);
-        $this->frontPagesRepository->update($page->id, [
-            'page_layout' => $request->page_section ? $request->page_section : NULL,
-            'page_layout_settings' => $request->placeholders ? $request->placeholders : NULL,
-            'header' => $request->header,
-            'footer' => $request->footer,
-            'url' => $request->url,
-            'title' => $request->title,
-            'status' => $request->status,
-            'page_access' => $request->page_access,
-            'main_content' => $request->main_content
-        ]);
+        $attributes=$page->getAttributes();
+        $requestData=$request->except('_token');
+        $data=[];
+        foreach ($attributes as $key=>$value){
+            if(isset($requestData[$key])){
+               $data[$key]=$requestData[$key];
+            }
+        }
+        $this->frontPagesRepository->update($page->id, $data);
         return $page;
     }
 
@@ -78,7 +76,7 @@ class FrontendPageService extends GeneralService
         return $new;
     }
 
-    public function getPlaceholdersInUrl(array $pageLayoutSettings = null)
+    public function getPlaceholdersInUrl(array $pageLayoutSettings = [])
     {
         if ($pageLayoutSettings) {
             return http_build_query($pageLayoutSettings);

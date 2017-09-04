@@ -29,7 +29,7 @@
                                                     <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
                                                            for="textarea">Default Header</label>
                                                     <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                        {!! BBbutton('templates','header_tpl','Select Header',['class' => 'form-control input-md btn-danger','data-type' => 'header','model' =>$system]) !!}
+                                                        {!! BBbutton2('unit','header_tpl','frontend_header','Select Header',['class' => 'form-control input-md btn-danger','data-type' => 'header','model' =>$system]) !!}
                                                     </div>
                                                     <div class="for_button_1 col-xs-6 col-sm-6 col-md-6 col-lg-3">
                                                         <input type="hidden" name="header_enabled" value="0">
@@ -41,7 +41,7 @@
                                                     <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
                                                            for="textarea">Default Footer</label>
                                                     <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                        {!! BBbutton('templates','footer_tpl','Select Footer',['class' => 'form-control input-md btn-danger','data-type' => 'footer','model' =>$system]) !!}
+                                                        {!! BBbutton2('unit','footer_tpl','frontend_footer','Select Footer',['class' => 'form-control input-md btn-danger','data-type' => 'footer','model' =>$system]) !!}
                                                     </div>
                                                     <div class="for_button_1 col-xs-6 col-sm-6 col-md-6 col-lg-3">
                                                         <input type="hidden" name="footer_enabled" value="0">
@@ -69,7 +69,7 @@
                                                     <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
                                                            for="textarea">Default Page Layout</label>
                                                     <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
-                                                        {!! BBbutton('page_sections','frontend_page_section','Select Page Layout',['class' => 'form-control input-md btn-danger','data-type' => 'frontend','model' =>$system]) !!}
+                                                        {!! BBbutton2('layouts','frontend_page_section','front_pages_layout','Select Page Layout',['class' => 'form-control input-md btn-danger','data-type' => 'frontend','model' =>$system]) !!}
                                                     </div>
                                                 </div>
 
@@ -122,7 +122,7 @@
 
 
 @section('JS')
-    {!! HTML::script("/resources/assets/js/UiElements/bb_styles.js?v.5") !!}
+    {!! HTML::script("js/UiElements/bb_styles.js?v.5") !!}
     {!! HTML::script('js/admin_pages.js') !!}
     {!! HTML::script('js/nestedSortable/jquery.mjs.nestedSortable.js') !!}
     {!! HTML::script('js/bootbox/js/bootbox.min.js') !!}

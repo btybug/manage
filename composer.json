@@ -7,6 +7,7 @@
         }
     ],
     "type": "module",
+    "route": "manage",
     "require": {},
 	"autoload": {
         "psr-4": {

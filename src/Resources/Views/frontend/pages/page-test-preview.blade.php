@@ -1,8 +1,8 @@
-@extends('layouts.frontendPagesPreview')
+@extends('manage::frontendPagesPreview')
 
 @section('content')
     <div class="previewlivesettingifream" style="background: white;">
-        <div class="normal">{!! (isset($data['layout'])?BBRenderPageSections($data['layout'],$data['settings']):BBRenderPageBody($data['page']->slug,$data['settings'])) !!}</div>
+        <div class="normal">{!! (isset($data['layout'])?BBRenderPageSections($data['layout'],$data['settings']): BBRenderPageBody($data['page']->slug,$data['settings'])) !!}</div>
     </div>
     <div id="previewImageifreamimage"></div>
 @stop
@@ -10,7 +10,6 @@
 @section('CSS')
     {!! HTML::style('css/create_pages.css') !!}
     {!! HTML::style('css/preview-template.css') !!}
-    {!! HTML::style("/js/animate/css/animate.css") !!}
     {!! HTML::style("/css/preview-template.css") !!}
 @stop
 
