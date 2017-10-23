@@ -17,8 +17,8 @@ class ModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-        $this->loadTranslationsFrom(__DIR__.'/../Resources/Lang', 'manage');
-        $this->loadViewsFrom(__DIR__.'/../Resources/Views', 'manage');
+        $this->loadTranslationsFrom(__DIR__ . '/../Resources/Lang', 'manage');
+        $this->loadViewsFrom(__DIR__ . '/../Resources/Views', 'manage');
 
         $tubs = [
             'manage_settings' => [
@@ -67,6 +67,10 @@ class ModuleServiceProvider extends ServiceProvider
                 [
                     'title' => 'Filters',
                     'url' => '/admin/manage/frontend/filters',
+                ],
+                [
+                    'title' => 'Hooks',
+                    'url' => '/admin/manage/frontend/hooks',
                 ]
             ],
             'page_edit' => [
@@ -89,6 +93,7 @@ class ModuleServiceProvider extends ServiceProvider
             ]
         ];
         \Eventy::action('my.tab', $tubs);
+        \Sahakavatar\Cms\Models\Routes::registerPages('sahak.avatar/manage');
 
     }
 

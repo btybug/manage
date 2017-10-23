@@ -21,6 +21,6 @@ class EmailGroups extends Model
 
     public function emails()
     {
-        return $this->hasMany('Sahakavatar\Manage\Models\Emails','group_id');
+        return $this->hasMany('Sahakavatar\Manage\Models\Emails', 'group_id');
     }
 }

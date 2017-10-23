@@ -11,15 +11,15 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
 use App\Models\Urlmanager;
+use Datatables;
+use Illuminate\Http\Request;
+use Sahakavatar\Cms\Helpers\helpers;
 use Sahakavatar\Manage\Models\Classifier;
 use Sahakavatar\Manage\Models\ClassifierItem;
 use Sahakavatar\Manage\Models\ClassifierItemPage;
 use Sahakavatar\Manage\Models\FrontendPage;
-use Datatables;
-use Illuminate\Http\Request;
 
 /**
  * Class ClassifyController
@@ -27,6 +27,7 @@ use Illuminate\Http\Request;
  */
 class ClassifyController extends Controller
 {
+    public $masterClassifier = null;
     /**
      * @var null|string
      */
@@ -35,8 +36,6 @@ class ClassifyController extends Controller
      * @var helpers|null
      */
     private $helpers = null;
-
-    public $masterClassifier = null;
 
     public function __construct()
     {
@@ -80,7 +79,7 @@ class ClassifyController extends Controller
     {
         $classifyData = $request->except('_token', 'terms');
 
-        $v = \Validator::make($classifyData,['title' => "required|unique:classifiers,title|unique:frontend_pages,title"]);
+        $v = \Validator::make($classifyData, ['title' => "required|unique:classifiers,title|unique:frontend_pages,title"]);
 
         if ($v->fails()) return redirect()->back()->withErrors($v->messages());
         $classifyData['id'] = uniqid();
@@ -98,7 +97,7 @@ class ClassifyController extends Controller
             'url' => '/all-classify/' . $classifier->slug
         ]);
 
-        if($newPageSaved) {
+        if ($newPageSaved) {
             $urlManager = new Urlmanager([
                 'front_page_id' => $newPageSaved->id,
                 'url' => $newPageSaved->url,
@@ -118,29 +117,29 @@ class ClassifyController extends Controller
 
             $path = '/public/img/classify/';
             $request->file('image')->move(
-                base_path($path),$imageName
+                base_path($path), $imageName
             );
 
             $classifier->update([
-                'image' => $path.$imageName
+                'image' => $path . $imageName
             ]);
         }
 
         return redirect()->back();
     }
 
-    public function postEdit($id,Request $request)
+    public function postEdit($id, Request $request)
     {
         $classifyData = $request->except('_token', 'terms');
-        $v = \Validator::make($classifyData,['title' => "required|unique:classifiers,title,".$id.",id"]);
+        $v = \Validator::make($classifyData, ['title' => "required|unique:classifiers,title," . $id . ",id"]);
 
         if ($v->fails()) return redirect()->back()->withErrors($v->messages());
 
         $classify = Classifier::find($id);
-        if($classify){
+        if ($classify) {
             $page = $classify->page()->where('type', 'classify')->first();
             if ($request->hasFile('image')) {
-                if(\File::exists(base_path($classify->image)))
+                if (\File::exists(base_path($classify->image)))
                     unlink(base_path($classify->image));
 
                 $imageName = uniqid() . '.' .
@@ -148,12 +147,12 @@ class ClassifyController extends Controller
 
                 $path = '/public/img/classify/';
                 $request->file('image')->move(
-                    base_path($path),$imageName
+                    base_path($path), $imageName
                 );
-                $classifyData['image'] = $path.$imageName;
+                $classifyData['image'] = $path . $imageName;
             }
 
-            if($classify->update($classifyData)) {
+            if ($classify->update($classifyData)) {
                 $page->title = $classify->title;
                 $page->save();
             }
@@ -173,38 +172,38 @@ class ClassifyController extends Controller
         $term = $request->get('terms');
         if ($term) {
             $items = [];
-            $id = $request->get('id',null);
+            $id = $request->get('id', null);
             $classifier = Classifier::find($request->classifier);
             $model = ClassifierItem::find($id);
-            if($classifier){
-                $items = $classifier->classifierItem()->where('id','!=',$id)->pluck('title','id')->toArray();
+            if ($classifier) {
+                $items = $classifier->classifierItem()->where('id', '!=', $id)->pluck('title', 'id')->toArray();
             }
             ($id) ? $url = "/admin/manage/frontend/classify/term-edit/$id" : $url = "/admin/manage/frontend/classify/term-create";
 
-            $html = \view("manage::frontend.classify._partials._term_form",compact(['model','url','classifier','items']))->render();
+            $html = \view("manage::frontend.classify._partials._term_form", compact(['model', 'url', 'classifier', 'items']))->render();
         } else {
-            $id = $request->get('id',null);
+            $id = $request->get('id', null);
             $model = Classifier::find($id);
             ($id) ? $url = "/admin/manage/frontend/classify/edit/$id" : $url = "/admin/manage/frontend/classify/create";
 
-            $html = \view("manage::frontend.classify._partials._form",compact(['model','url']))->render();
+            $html = \view("manage::frontend.classify._partials._form", compact(['model', 'url']))->render();
         }
 
         return \Response::json(['error' => false, 'html' => $html]);
     }
 
-    public function postTermEdit($id,Request $request)
+    public function postTermEdit($id, Request $request)
     {
         $classifyData = $request->except('_token');
-        $v = \Validator::make($classifyData,['title' => "required"]);
+        $v = \Validator::make($classifyData, ['title' => "required"]);
 
         if ($v->fails()) return redirect()->back()->withErrors($v->messages());
 
         $classifierItem = ClassifierItem::find($id);
-        if($classifierItem){
+        if ($classifierItem) {
             $page = $classifierItem->page()->where('type', 'classify')->first();
             if ($request->hasFile('image')) {
-                if(\File::exists(base_path($classifierItem->image)))
+                if (\File::exists(base_path($classifierItem->image)))
                     unlink(base_path($classifierItem->image));
 
                 $imageName = uniqid() . '.' .
@@ -212,15 +211,15 @@ class ClassifyController extends Controller
 
                 $path = '/public/img/classify/';
                 $request->file('image')->move(
-                    base_path($path),$imageName
+                    base_path($path), $imageName
                 );
-                $classifyData['image'] = $path.$imageName;
+                $classifyData['image'] = $path . $imageName;
             }
 //            if($classify->parent_id != $classifyData['parent_id']) {
 //                $classify->buildSlug();
 //            }
 
-            if($classifierItem->update($classifyData)) {
+            if ($classifierItem->update($classifyData)) {
                 $classifierItem->buildSlug();
                 $classifierItem->save();
 
@@ -236,7 +235,6 @@ class ClassifyController extends Controller
         }
 
 
-
         return redirect()->back();
     }
 
@@ -244,7 +242,7 @@ class ClassifyController extends Controller
     {
         $itemData = $request->except('_token');
 
-        $v = \Validator::make($itemData,['title' => "required"]);
+        $v = \Validator::make($itemData, ['title' => "required"]);
 
         if ($v->fails()) return redirect()->back()->withErrors($v->messages());
         $itemData['id'] = uniqid();
@@ -277,11 +275,11 @@ class ClassifyController extends Controller
 
             $path = '/public/img/classify/';
             $request->file('image')->move(
-                base_path($path),$imageName
+                base_path($path), $imageName
             );
 
             $classifierItem->update([
-                'image' => $path.$imageName
+                'image' => $path . $imageName
             ]);
         }
 
@@ -303,11 +301,12 @@ class ClassifyController extends Controller
         return \Response::json(['error' => false, 'html' => $html]);
     }
 
-    public function postDelete(Request $request) {
+    public function postDelete(Request $request)
+    {
         $deleted = false;
         $classify = Classifier::find($request->slug);
-        if($classify) {
-            if(!empty($classify->image)){
+        if ($classify) {
+            if (!empty($classify->image)) {
                 unlink(base_path($classify->image));
             }
             $deleted = $classify->delete();
@@ -315,10 +314,11 @@ class ClassifyController extends Controller
         return \Response::json(['success' => $deleted, 'url' => url('/admin/manage/frontend/classify')]);
     }
 
-    public function postDeleteItem(Request $request) {
+    public function postDeleteItem(Request $request)
+    {
         $deleted = false;
         $classifierItem = ClassifierItem::find($request->slug);
-        if($classifierItem) {
+        if ($classifierItem) {
             $deleted = $classifierItem->delete();
         }
         return \Response::json(['success' => $deleted, 'url' => url('/admin/manage/frontend/classify')]);

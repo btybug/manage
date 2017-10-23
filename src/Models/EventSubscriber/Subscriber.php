@@ -20,7 +20,7 @@ class Subscriber
     public function __construct($old_obj = null)
     {
         $this->path = storage_path('app' . DS . 'event_subscriber.json');
-        if($old_obj){
+        if ($old_obj) {
             $this->store = $old_obj->store;
             $this->events = $old_obj->events;
             $this->properties = $old_obj->properties;
@@ -39,7 +39,7 @@ class Subscriber
 
     public function addAction($event, $action, $settings = [])
     {
-        return $this->store[$event][$action . '$' . uniqid()]=$settings;
+        return $this->store[$event][$action . '$' . uniqid()] = $settings;
     }
 
     public function addEvent($name, $namespace)
@@ -68,17 +68,21 @@ class Subscriber
     {
         return $this->data;
     }
-    public function getEvents($lists=false){
-        if(!$lists){
+
+    public function getEvents($lists = false)
+    {
+        if (!$lists) {
             return $this->events;
         }
-        $listData=[];
-        foreach ($this->events as $key=>$value){
-            $listData[$value]=$key;
+        $listData = [];
+        foreach ($this->events as $key => $value) {
+            $listData[$value] = $key;
         }
-      return $listData;
+        return $listData;
     }
-    public function getProperties(){
+
+    public function getProperties()
+    {
         return $this->properties;
     }
 
@@ -86,10 +90,12 @@ class Subscriber
     {
         return new Subscriber($this);
     }
-    public function cleaner($event,$function){
-        if(isset($this->data[$event])){
-            foreach($this->data[$event] as  $key=>$value){
-                if(strpos($key,$function)===0){
+
+    public function cleaner($event, $function)
+    {
+        if (isset($this->data[$event])) {
+            foreach ($this->data[$event] as $key => $value) {
+                if (strpos($key, $function) === 0) {
 
                     unset($this->data[$event][$key]);
                 }

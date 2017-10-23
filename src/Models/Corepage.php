@@ -11,8 +11,8 @@
 
 namespace Sahakavatar\Manage\Models;
 
-use Sahakavatar\Cms\Helpers\helpers;
 use Illuminate\Database\Eloquent\Model;
+use Sahakavatar\Cms\Helpers\helpers;
 
 //use Sahakavatar\Theme\SidebarTypes;
 class Corepage extends Model
@@ -27,7 +27,7 @@ class Corepage extends Model
      */
     protected $dates = ['created_at', 'updated_at'];
 
-    protected static function boot ()
+    protected static function boot()
     {
 
         parent::boot();
@@ -42,42 +42,42 @@ class Corepage extends Model
     }
 
 
-    public function getDates ()
+    public function getDates()
     {
         return ['created_at', 'updated_at'];
     }
 
-    public function template ()
+    public function template()
     {
         return $this->belongsTo('Sahakavatar\Assets\Template', 'page_tpl');
     }
 
-    public function customsidebar ()
+    public function customsidebar()
     {
         // return $this->belongsTo('App\Models\Customsidebar','side_bar_id');
     }
 
-    public function parent ()
+    public function parent()
     {
         return $this->belongsTo('Sahakavatar\Create\Models\Corepage', 'parent_id');
     }
 
-    public function taxonomy ()
+    public function taxonomy()
     {
         return $this->belongsTo('App\Models\Taxonomy', 'taxonomy_id');
     }
 
-    public function groups ()
+    public function groups()
     {
         return $this->belongsToMany('Sahakavatar\User\Groups', 'page_groups', 'page_id', 'group_id');
     }
 
-    public function urlmanager ()
+    public function urlmanager()
     {
         return $this->hasOne('App\Models\Urlmanager', 'page_id');
     }
 
-    public function dataOption ($data, $req)
+    public function dataOption($data, $req)
     {
 
         if (empty($this->data_option)) {
@@ -101,7 +101,7 @@ class Corepage extends Model
         return ($this->data_option);
     }
 
-    public function members ()
+    public function members()
     {
         return $this->belongsToMany('Sahakavatar\Membership\Models\MemberGroups', 'pages_memberships_permissions', 'page_id', 'membership_id');
     }
@@ -110,7 +110,7 @@ class Corepage extends Model
      * @param $type
      * @return array
      */
-    public function getPagesbytype ($type)
+    public function getPagesbytype($type)
     {
         $pages = [];
         $rs = self::where('page_type', $type)
@@ -150,12 +150,12 @@ class Corepage extends Model
         return $pages;
     }
 
-    public function childs ()
+    public function childs()
     {
         return $this->hasMany('Sahakavatar\Create\Models\Corepage', 'parent_id');
     }
 
-    public function getPages ($parent_id = 0)
+    public function getPages($parent_id = 0)
     {
         $pages = [];
         $rs = self::select(
@@ -198,7 +198,7 @@ class Corepage extends Model
         return $pages;
     }
 
-    public function getUrl ($page)
+    public function getUrl($page)
     {
         $url = '';
         if (count($page->urlmanager)) {
@@ -214,7 +214,7 @@ class Corepage extends Model
      * @param $id
      * @return array
      */
-    public function getPage ($id)
+    public function getPage($id)
     {
         $status = $this->getStatus();
         $visibility = $this->getVisibility();
@@ -253,7 +253,7 @@ class Corepage extends Model
         }
     }
 
-    public function getStatus ()
+    public function getStatus()
     {
         return ['draft' => 'Draft', 'pending' => 'Pending Review', 'published_public_access' => 'Published - Public access', 'published_membership_access' => 'Published - membership access'];
     }
@@ -273,12 +273,12 @@ class Corepage extends Model
 //        return $data;
 //    }
 
-    public function getVisibility ()
+    public function getVisibility()
     {
         return ['Yes' => 'Yes', 'No' => 'No'];
     }
 
-    public function getSelectedUg ($grps)
+    public function getSelectedUg($grps)
     {
         $selected_ug = [];
         $user_groups = ($grps != '') ? unserialize($grps) : '';
@@ -291,7 +291,7 @@ class Corepage extends Model
         return $selected_ug;
     }
 
-    public function updatePage ($request)
+    public function updatePage($request)
     {
         $check = Urlmanager::where('url', $request->view_url)
             ->where('page_id', '!=', $request->id)
@@ -327,7 +327,7 @@ class Corepage extends Model
      * @param Request $request
      * @return array
      */
-    public function Addchild ($request)
+    public function Addchild($request)
     {
         $req = $request;
 
@@ -335,7 +335,7 @@ class Corepage extends Model
         $validator = \Validator::make(
             $req,
             [
-                'title'    => 'required|max:255|min:3',
+                'title' => 'required|max:255|min:3',
                 'view_url' => 'required|max:25|min:3|unique:urlmanager,url',
             ]
 //            [
@@ -369,7 +369,7 @@ class Corepage extends Model
 
     }
 
-    public function getPageSideBars ($id)
+    public function getPageSideBars($id)
     {
         $data = [];
         $page = self::find($id);
@@ -387,7 +387,7 @@ class Corepage extends Model
      * @param $id
      * @return string
      */
-    public function getSideBar ($id)
+    public function getSideBar($id)
     {
         $side_bar_data = "";
         if (File::exists(config('paths.CACHE') . "sidebars/" . $id . ".blade.php")) {
@@ -421,7 +421,7 @@ class Corepage extends Model
      * @param $layout_id
      * @return mixed
      */
-    public function getLayout ($layout_id)
+    public function getLayout($layout_id)
     {
         $layoutObject = BBgetLayoutJson($layout_id);
         $layout = (object)[];

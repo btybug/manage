@@ -11,12 +11,8 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use Sahakavatar\Cms\Helpers\helpers;
-use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
 use App\Models\ExtraModules\Structures;
-use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
-use File;
 use Illuminate\Http\Request;
 
 

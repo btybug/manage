@@ -41,14 +41,16 @@
                         <p><b>Function Name:</b> {{ $current['function'] }} </p>
                         <p><b>Params:</b> {{ ($current['params']) ? $current['params'] : "No Params" }}</p>
                         <p><b>Description:</b> {{ $current['description'] }} </p>
-                        <p><b>Structure:</b> {{ ($structure) ? \App\Models\ExtraModules\Structures::find($structure)->name : "Core" }} </p>
+                        <p>
+                            <b>Structure:</b> {{ ($structure) ? \App\Models\ExtraModules\Structures::find($structure)->name : "Core" }}
+                        </p>
                     </div>
                     <div class="row">
                         <h3>Example of function </h3>
                         @if($current['example'])
                             @php
-                            $function=$current['example'];
-                            eval(" echo $function;")
+                                $function=$current['example'];
+                                eval(" echo $function;")
                             @endphp
                         @else
                             Empty example

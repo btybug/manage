@@ -14,12 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 class ClassifierItemPage extends Model
 {
 
-    protected $table = 'classify_items_pages';
-
-    protected $primaryKey = 'id';
-
     public $incrementing = false;
-
+    protected $table = 'classify_items_pages';
+    protected $primaryKey = 'id';
     /**
      * @var array
      */
@@ -36,56 +33,15 @@ class ClassifierItemPage extends Model
      */
     protected $guarded = ['created_at'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function classifierItem ()
+    public static function createClassifierPageRelations($classifiers, $pageId)
     {
-        return $this->belongsTo(ClassifierItem::class, 'classifier_item_id', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function classifier ()
-    {
-        return $this->belongsTo(Classifier::class, 'classifier_id', 'id');
-    }
-
-    public function getClassifierItemsByClassifier() {
-        $result = [];
-        if($this->isMultiple()) {
-            $classifiersRelations = self::where('classifier_id', $this->classifier_id)->get();
-            foreach($classifiersRelations as $classifiersRelation) {
-                $result[] = $classifiersRelation->classifierItem()->pluck('title', 'id')->toArray();
-            }
-        }
-        return $result;
-    }
-
-    public function isMultiple() {
-        if($this->classifier_id) {
-            return $multiple = self::where('classifier_id', $this->classifier_id)->count() > 1 ? true : false;
-        }
-    }
-
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
-     */
-    public function frontPage ()
-    {
-        return $this->belongsTo(FrontendPage::class, 'front_page_id', 'id');
-    }
-
-    public static function createClassifierPageRelations($classifiers, $pageId) {
-        if($classifiers && is_array($classifiers)) {
+        if ($classifiers && is_array($classifiers)) {
             $existingRelationsDeleted = self::deleteRelationsByPageId($pageId);
-            if($existingRelationsDeleted) {
-                foreach($classifiers as $classifierID => $classifier) {
+            if ($existingRelationsDeleted) {
+                foreach ($classifiers as $classifierID => $classifier) {
                     $classifierPageItem = new self();
-                    if(is_array($classifier)) {
-                        foreach($classifier as $classifierItem) {
+                    if (is_array($classifier)) {
+                        foreach ($classifier as $classifierItem) {
                             $classifierPageItem = new self();
                             $dataToInsert = [
                                 'front_page_id' => $pageId,
@@ -109,12 +65,56 @@ class ClassifierItemPage extends Model
         }
     }
 
-    public static function deleteRelationsByPageId($pageId) {
+    public static function deleteRelationsByPageId($pageId)
+    {
         $existingRelations = self::where('front_page_id', $pageId);
-        if($existingRelations->count()) {
+        if ($existingRelations->count()) {
             return $existingRelations->delete();
         }
         return true;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function classifier()
+    {
+        return $this->belongsTo(Classifier::class, 'classifier_id', 'id');
+    }
+
+    public function getClassifierItemsByClassifier()
+    {
+        $result = [];
+        if ($this->isMultiple()) {
+            $classifiersRelations = self::where('classifier_id', $this->classifier_id)->get();
+            foreach ($classifiersRelations as $classifiersRelation) {
+                $result[] = $classifiersRelation->classifierItem()->pluck('title', 'id')->toArray();
+            }
+        }
+        return $result;
+    }
+
+    public function isMultiple()
+    {
+        if ($this->classifier_id) {
+            return $multiple = self::where('classifier_id', $this->classifier_id)->count() > 1 ? true : false;
+        }
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function classifierItem()
+    {
+        return $this->belongsTo(ClassifierItem::class, 'classifier_item_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\belongsTo
+     */
+    public function frontPage()
+    {
+        return $this->belongsTo(FrontendPage::class, 'front_page_id', 'id');
     }
 
 

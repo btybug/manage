@@ -11,91 +11,49 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
-use Sahakavatar\User\Models\Roles;
 use Datatables;
 use File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Sahakavatar\User\Models\Roles;
 use Table;
 use TableView;
 use Validator;
 
-class MenuFrontController extends Controller
+class old extends Controller
 {
-
-    private $menu = null;
-    private $custompage = null;
-    private $page = null;
-    private $user_roles = null;
-    private $mb = null; // for menu builder object
-    private $menuedata = null;
-    private $dhelp = null;
-    private $helper = null;
-
-    public function __construct (
-
-        Page $page,
-        MenuBuilder $mb,
-        CHelper $chelper
-
+    public function getIndex(
+        Request $request
     )
     {
-        dd(1);
-
-        $this->page = $page;
-        $this->user_roles = Roles::pluck('name', 'slug');
-        $this->mb = $mb;
-        $this->chelper = $chelper;
-        $this->dhelp = new \Sahakavatar\Cms\Helpers\helpers;
-        $this->helper = new helpers;
-    }
-
-    public function getMenus ($slug, Request $request)
-    {
-
-        $type = "frontend";
-        $menu = $request->get('p');
-        $menus = [];
-
-        if (count($menus)) if (! $menu) $menu = $menus[0]->getBasename('.json');
-
-        $roles = Roles::where('slug', '!=', 'user')->get();
-
-        return view('console::modules.settings.build.menus', compact(['slug', 'type', 'menus', 'roles', 'menu']));
-    }
-    public function getIndex (Request $request)
-    {
-        dd(1);
-
         $type = "backend";
         $menu = $request->get('p');
         $menus = [];
 
-        if (count($menus)) if (! $menu) $menu = $menus[0]->getBasename('.json');
+        if (count($menus)) if (!$menu) $menu = $menus[0]->getBasename('.json');
 
         $roles = Roles::where('slug', '!=', 'user')->get();
 
 
-        return view('manage::frontend.menus.index', compact([ 'type', 'menus', 'roles', 'menu']));
+        return view('manage::frontend.menus.index', compact(['type', 'menus', 'roles', 'menu']));
     }
 
-    public function getCreate ()
+    public function getCreate()
     {
         $pages = $this->page->getPages();
 
         return view('manage::frontend.menus.create', compact(['pages']));
     }
 
-    public function postCreate (Request $request)
+    public function postCreate(Request $request)
     {
         $data = $request->all();
         $data = [
-            'name'      => $data['name'],
+            'name' => $data['name'],
             'html_data' => $data['html_data'],
             'json_data' => $data['json_data'],
-            'section'   => 'frontend'
+            'section' => 'frontend'
         ];
         $v = \Validator::make($data, ['name' => 'required', 'html_data' => 'required', 'json_data' => 'required']);
         if ($v->fails()) return redirect()->back()->withErrors($v->errors());
@@ -111,11 +69,11 @@ class MenuFrontController extends Controller
         return redirect()->back();
     }
 
-    public function getUpdate ($id)
+    public function getUpdate($id)
     {
         $menu = Menu::find($id);
 
-        if (! $menu) return redirect()->back();
+        if (!$menu) return redirect()->back();
 
         $pages = $this->page->getPages();
 
@@ -128,15 +86,15 @@ class MenuFrontController extends Controller
      * @param Request $request
      * @return type
      */
-    public function postUpdate (Request $request)
+    public function postUpdate(Request $request)
     {
         $data = $request->all();
         $menu = Menu::find($data['id']);
 
-        if (! $menu) return \Response::json(['error' => true, 'message' => 'Menu does not exists']);
+        if (!$menu) return \Response::json(['error' => true, 'message' => 'Menu does not exists']);
 
         $data = [
-            'name'      => $data['name'],
+            'name' => $data['name'],
             'html_data' => $data['html_data'],
             'json_data' => $data['json_data']
         ];
@@ -163,7 +121,7 @@ class MenuFrontController extends Controller
      * @param Request $request , Having menu id and its parent id
      * @return term object
      */
-    public function postAddmenuitem (Request $request)
+    public function postAddmenuitem(Request $request)
     {
         $req = $request->all();
         $details = json_decode(stripslashes($req['itemDetails']), true);
@@ -181,7 +139,7 @@ class MenuFrontController extends Controller
             $data['url'] = $data['text_link'];
         }
 
-        if (! isset($data['new_link'])) {
+        if (!isset($data['new_link'])) {
             $data['new_link'] = 'off';
         }
 
@@ -224,7 +182,7 @@ class MenuFrontController extends Controller
      * @param Request $request , Having menu id and its parent id
      * @return term object
      */
-    public function postChangeparent (Request $request)
+    public function postChangeparent(Request $request)
     {
         $req = $request->all();
         $menu_id = $req['id'];
@@ -241,7 +199,7 @@ class MenuFrontController extends Controller
      * @param Request $request ,Have Term Id in Request
      * @return null
      */
-    public function postDelmenuitem (Request $request)
+    public function postDelmenuitem(Request $request)
     {
         $req = $request->all();
         $id = $req['id'];
@@ -254,7 +212,7 @@ class MenuFrontController extends Controller
         }
     }
 
-    public function getHtml ($id)
+    public function getHtml($id)
     {
         return menuHtml($id, 'before');
     }
@@ -263,11 +221,11 @@ class MenuFrontController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function getDelete ($id)
+    public function getDelete($id)
     {
         $menu = Menu::find($id);
 
-        if (! $menu) return redirect()->back();
+        if (!$menu) return redirect()->back();
 
         $menu->delete();
         $this->helper->updatesession('Menu ' . $menu->name . ' deleted successfully!!!', 'alert-success');
@@ -276,7 +234,7 @@ class MenuFrontController extends Controller
     }
 
 //Bulk Delete
-    public function postDelete (Request $request)
+    public function postDelete(Request $request)
     {
         $req = $request->all();
         $ids_arr = explode(",", $req['ids']);
@@ -287,7 +245,7 @@ class MenuFrontController extends Controller
         }
     }
 
-    public function getData ()
+    public function getData()
     {
 
         $data = $this->menu->all();
@@ -296,7 +254,7 @@ class MenuFrontController extends Controller
             'action',
             $this->dhelp->actionBtns(
                 [
-                    'edit'   => ['link' => '/admin/manage/frontend/menus/update/{!! $id !!}'],
+                    'edit' => ['link' => '/admin/manage/frontend/menus/update/{!! $id !!}'],
                     'delete' => ['link' => '/admin/manage/frontend/menus/delete/{!! $id !!}'],
 
                 ]
@@ -311,7 +269,7 @@ class MenuFrontController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function getMenufile ($id)
+    public function getMenufile($id)
     {
         $menu = $this->dhelp->formatCustomFld($this->menu->find($id));
         $menudata = $this->chelper->list_menues($this->menuedata->findMenusData($menu->id));
@@ -325,7 +283,7 @@ class MenuFrontController extends Controller
      * Provides All Front end Menues for showing in Side bars
      *
      */
-    public function getSidebarmenus ()
+    public function getSidebarmenus()
     {
         $menus = $this->menu->findAllBy('section', 'front_end');
 
@@ -353,8 +311,8 @@ class MenuFrontController extends Controller
                 $menu_css = '';
             }
             $data[] = [
-                'id'        => $menu->id,
-                'title'     => $menu->title,
+                'id' => $menu->id,
+                'title' => $menu->title,
                 'json_data' => $json_data,
                 'html_data' => $html_data,
                 'cssc_lass' => $menu_css

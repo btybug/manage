@@ -330,8 +330,8 @@
                 }
             });
 
-            $('body').on('change', 'select[name="trigger_on_form"]', function() {
-                if($(this).val() != '0') {
+            $('body').on('change', 'select[name="trigger_on_form"]', function () {
+                if ($(this).val() != '0') {
                     $.ajax({
                         url: "{!! url('/admin/manage/emails/get-forms-shortcodes') !!}",
                         type: 'POST',
@@ -339,11 +339,11 @@
                             form_slug: $(this).val()
                         },
                         headers: {
-                            'X-CSRF-TOKEN':$("input[name='_token']").val()
+                            'X-CSRF-TOKEN': $("input[name='_token']").val()
                         }
-                    }).done(function(data) {
+                    }).done(function (data) {
                         $('#specific_shortcodes').html(data.html);
-                    }).fail(function() {
+                    }).fail(function () {
                         alert('Could not load shortcodes. Please try again.');
                     });
                 }
@@ -351,10 +351,10 @@
             });
 
             var event_code = $('#event_trigger').val();
-            if(event_code == 'form_submited'){
+            if (event_code == 'form_submited') {
                 var form_slug = $('select[name="trigger_on_form"]').val();
 
-                if(form_slug != '0') {
+                if (form_slug != '0') {
                     $.ajax({
                         url: "{!! url('/admin/manage/emails/get-forms-shortcodes') !!}",
                         type: 'POST',
@@ -362,11 +362,11 @@
                             form_slug: form_slug
                         },
                         headers: {
-                            'X-CSRF-TOKEN':$("input[name='_token']").val()
+                            'X-CSRF-TOKEN': $("input[name='_token']").val()
                         }
-                    }).done(function(data) {
+                    }).done(function (data) {
                         $('#specific_shortcodes').html(data.html);
-                    }).fail(function() {
+                    }).fail(function () {
                         alert('Could not load shortcodes. Please try again.');
                     });
                 }
@@ -374,7 +374,7 @@
             }
         });
 
-        $('body').on('click', ".sc-item", function() {
+        $('body').on('click', ".sc-item", function () {
             tinymce.activeEditor.execCommand('mceInsertContent', false, $(this).text());
         });
 

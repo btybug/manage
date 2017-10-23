@@ -51,7 +51,8 @@
                     <div class="panel-body">
                         <ul class="list-group listwithlink menuwithbutton">
                             @foreach($subscriber->getProperties() as $name=>$namespace)
-                                <li class="list-group-item" data-value="{!! $namespace !!}" data-btnclick="selectfunction"><span
+                                <li class="list-group-item" data-value="{!! $namespace !!}"
+                                    data-btnclick="selectfunction"><span
                                             class="badge">0</span> {!! $name !!}
                                     <div class="listtool">
                                         <button type="button" class="btn btn-default btn-xs" data-btnclick="addtab"
@@ -66,9 +67,9 @@
             </div>
 
         </div>
-        
+
         <div class="row">
-        	<textarea data-json="exportjson" class="form-control"></textarea>
+            <textarea data-json="exportjson" class="form-control"></textarea>
         </div>
     </div>
 

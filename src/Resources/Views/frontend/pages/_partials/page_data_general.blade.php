@@ -1,15 +1,6 @@
 @if($page)
     {!! Form::model($page,['url' => url("/admin/manage/frontend/pages/settings", [$id]), 'id' => 'page_settings_form']) !!}
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="pull-right">
-                <a data-href="{!! url('/admin/manage/frontend/pages/page-test-preview/'.$page->id."?pl_live_settings=page_live&pl=" . $page->page_layout . '&' . $placeholders) !!}"  class="live-preview-btn"  ><i
-                            class="fa fa-eye" aria-hidden="true"></i> View
-                </a>
-                {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn')) }}
-            </div>
-        </div>
-    </div>
+
     <div class="row">
         <div class="col-xs-12 col-sm-9 connected" data-bbsortable="target">
             <div class="panel panel-default custompanel m-t-20">
@@ -25,46 +16,32 @@
                             <div class="row left_part_publ">
                                 <div>
                                     <div class="row rows">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs">
-                                            <i class="fa fa-file-text" aria-hidden="true"></i><span
-                                                    class="labls">Page Name</span>
-                                            {!! Form::text('title',null,['class' => 'page_name']) !!}
-                                        </div>
-
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs">
-                                            <i class="fa fa-file-text" aria-hidden="true"></i><span
-                                                    class="labls">Page URL</span>
-                                            @if($page->type == 'custom')
-                                                {!! Form::text('url',null,['class' => 'page_url']) !!}
-                                            @else
-                                                <div class="page_address page_labels">{!! $page->url !!}</div>
-                                                {!! Form::hidden('url',null) !!}
-                                            @endif
-                                        </div>
-                                    </div>
-                                    <div class="row rows">
-                                    </div>
-                                    <div class="row rows">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs ">
-                                            <i class="fa fa-file-o" aria-hidden="true"></i><span
-                                                    class="labls">Status</span>
-                                            {!! Form::select('status',['draft' => 'Draft','published' => 'Published'],null,[]) !!}
-                                        </div>
 
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs ">
-                                            <i class="fa fa-universal-access" aria-hidden="true"></i><span
-                                                    class="labls">Page access</span>
-                                            <div class="radio">
-                                                <label for="radios-0">
-                                                    {!! Form::radio('page_access',1,true) !!}
-                                                    Public
-                                                </label>
+                                            <div class="col-md-6">
+                                                <i class="fa fa-universal-access" aria-hidden="true"></i><span
+                                                        class="labls">Page access</span>
+                                                <div class="radio">
+                                                    <label for="radios-0">
+                                                        {!! Form::radio('page_access',0,true,['class' => 'access-radio']) !!}
+                                                        Public
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label for="radios-1">
+                                                        {!! Form::radio('page_access',1,null,['class' => 'access-radio']) !!}
+                                                        Roles
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label for="radios-1">
+                                                        {!! Form::radio('page_access',2,null,['class' => 'access-radio']) !!}
+                                                        Loged in
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="radio">
-                                                <label for="radios-1">
-                                                    {!! Form::radio('page_access',0) !!}
-                                                    Members only
-                                                </label>
+                                            <div class="col-md-6 roles-box {!! ($page->page_access == 1) ? "show" : "hide" !!}">
+                                                {!! Form::text('roles',$page->getRolesByPage($id,true),['data-allwotag' => $roles,'class'=>'form-control hide tagit-hidden-field','data-tagit'=>'tagit' ,'id' => 'tagits']) !!}
                                             </div>
                                         </div>
                                     </div>
@@ -113,6 +90,14 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-3 create connected" data-bbsortable="source">
+            <div class="panel panel-default custompanel m-t-20">
+                <div class="panel-heading">General</div>
+                <div class="panel-body">
+                    <a href="javascript:void(0)" class="btn btn-info btn-block full-page-view m-b-5">Full Preview</a>
+                    {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn m-b-5 btn-block','style' => "width:100%;")) }}
+                </div>
+            </div>
+
             @if($page->type != 'classify' && $page->type != 'tags')
                 <div class="panel panel-default custompanel m-t-20">
                     <div class="panel-heading"> Page Tags</div>
@@ -180,6 +165,33 @@
         </div>
     </div>
     {!! Form::close() !!}
+
+    <div class="modal fade" id="full-page-view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <button class="btn close-live-edit" data-dismiss="modal" aria-label="Close">
+                    <span class="fa fa-power-off"></span>
+                </button>
+                <div class="modal-body">
+                    <div class="live-edit-menu">
+                        <div class="btn-group">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Some live action</a></li>
+                                <li><a href="#">Some live Settings</a></li>
+                                <li><a href="#">Some live etc</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="iframe-area"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('resources::assests.magicModal')
 @else
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 design_panel">
@@ -191,6 +203,7 @@
 
 @section('CSS')
     {!! HTML::style('/css/create_pages.css') !!}
+    {!!HTML::style( '/css/tag-it/jquery.tagit.css' ) !!}
     <style>
         #main-wrapper {
             min-height: 1000px;
@@ -222,23 +235,53 @@
     {!! HTML::script('/js/page-setting.js') !!}
     {!! HTML::script("/js/UiElements/bb_div.js?v.5") !!}
     {!! HTML::script('/js/tinymice/tinymce.min.js') !!}
+    {!! HTML::script('js/tag-it/tag-it.js') !!}
     <script>
 
         $(document).ready(function () {
+            $(".access-radio").click(function () {
+                if ($(this).val() == 1) {
+                    $(".roles-box").removeClass("hide").addClass("show");
+                } else {
+                    $(".roles-box").removeClass("show").addClass("hide");
+                }
+            });
+
+            var getExt = $('#tagits').data('allwotag').split(',')
+            $('[data-tagit="tagit"]').tagit({
+                availableTags: getExt,
+                // This will make Tag-it submit a single form value, as a comma-delimited field.
+                autocomplete: {delay: 0, minLength: 0},
+                singleField: true,
+                singleFieldNode: $('.tagitext'),
+                beforeTagAdded: function (event, ui) {
+                    if (!ui.duringInitialization) {
+                        var exis = getExt.indexOf(ui.tagLabel);
+                        if (exis < 0) {
+                            $('.tagit-new input').val('');
+                            //alert('PLease add allow at tag')
+                            return false;
+                        }
+                    }
+
+                }
+            })
+
+
             tinymce.init({
                 selector: '#main_content', // change this value according to your HTML
                 height: 200,
                 theme: 'modern',
-                 plugins: [
-						'advlist anchor autolink autoresize autosave bbcode charmap code codesample colorpicker contextmenu directionality emoticons fullpage fullscreen hr image imagetools importcss insertdatetime legacyoutput link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount shortcodes',
-					],
-				toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-  				toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help shortcodes',
+                plugins: [
+                    'advlist anchor autolink autoresize autosave bbcode charmap code codesample colorpicker contextmenu directionality emoticons fullpage fullscreen hr image imagetools importcss insertdatetime legacyoutput link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount shortcodes',
+                ],
+                toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help shortcodes',
                 image_advtab: true
             });
 
-            $('body').on('click', '.live-preview-btn', function() {
-                if(!$(this).next().hasClass('redirect-type')) {
+            $('body').on('click', '.live-preview-btn', function () {
+                if (!$(this).next().hasClass('redirect-type')) {
                     var typeInput = $('<input/>', {
                         type: 'hidden',
                         name: 'redirect_type',

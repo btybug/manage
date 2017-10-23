@@ -14,53 +14,53 @@
                 </div>
             @endif
             {{--<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">--}}
-                {{--@if(count($pages))--}}
-                    {{--@if($type == 'classify')--}}
-                <div class="col-md-8 col-md-offset-2">
-                        {!! hierarchyAdminPagesListFull($pages) !!}
-                </div>
-                    {{--@else--}}
-                        {{--@foreach($pages as $p)--}}
-                            {{--<li class="panel panel-default page_col">--}}
-                                {{--@if(isset($_GET['p']) && $_GET['p'] == $p->id)--}}
-                                    {{--<div class="panel-heading" style="background-color: black;color:white;" role="tab"--}}
-                                         {{--id="headingOne">--}}
-                                {{--@else--}}
-                                    {{--@if($loop->first == $p->id && ! isset($_GET['p']))--}}
-                                        {{--<div class="panel-heading" style="background-color: black;color:white;"--}}
-                                             {{--role="tab" id="headingOne">--}}
-                                    {{--@else--}}
-                                        {{--<div class="panel-heading" role="tab" id="headingOne">--}}
-                                    {{--@endif--}}
-                                {{--@endif--}}
+            {{--@if(count($pages))--}}
+            {{--@if($type == 'classify')--}}
+            <div class="col-md-8 col-md-offset-2">
+                {!! hierarchyAdminPagesListFull($pages) !!}
+            </div>
+            {{--@else--}}
+            {{--@foreach($pages as $p)--}}
+            {{--<li class="panel panel-default page_col">--}}
+            {{--@if(isset($_GET['p']) && $_GET['p'] == $p->id)--}}
+            {{--<div class="panel-heading" style="background-color: black;color:white;" role="tab"--}}
+            {{--id="headingOne">--}}
+            {{--@else--}}
+            {{--@if($loop->first == $p->id && ! isset($_GET['p']))--}}
+            {{--<div class="panel-heading" style="background-color: black;color:white;"--}}
+            {{--role="tab" id="headingOne">--}}
+            {{--@else--}}
+            {{--<div class="panel-heading" role="tab" id="headingOne">--}}
+            {{--@endif--}}
+            {{--@endif--}}
 
-                                    {{--<h4 class="panel-title">--}}
-                                        {{--<a href="?type={{ $type }}&p={{ $p->id }}"--}}
-                                           {{--aria-expanded="true"--}}
-                                           {{--class="link_name">--}}
-                                            {{--{{ $p->title }}--}}
-                                        {{--</a>--}}
-                                    {{--</h4>--}}
-                                {{--</div>--}}
-                            {{--</li>--}}
-                        {{--@endforeach--}}
-                    {{--@endif--}}
-                {{--@else--}}
-                    {{--<li class="panel panel-default page_col">--}}
-                        {{--<div class="panel-heading" role="tab" id="headingOne">--}}
-                            {{--<h4 class="panel-title">--}}
-                                {{--<a data-toggle="collapse" href="#" aria-expanded="true" aria-controls="collapseOne"--}}
-                                   {{--class="link_name collapsed">--}}
-                                    {{--No Pages--}}
-                                {{--</a>--}}
-                            {{--</h4>--}}
-                        {{--</div>--}}
-                    {{--</li>--}}
-                {{--@endif--}}
+            {{--<h4 class="panel-title">--}}
+            {{--<a href="?type={{ $type }}&p={{ $p->id }}"--}}
+            {{--aria-expanded="true"--}}
+            {{--class="link_name">--}}
+            {{--{{ $p->title }}--}}
+            {{--</a>--}}
+            {{--</h4>--}}
+            {{--</div>--}}
+            {{--</li>--}}
+            {{--@endforeach--}}
+            {{--@endif--}}
+            {{--@else--}}
+            {{--<li class="panel panel-default page_col">--}}
+            {{--<div class="panel-heading" role="tab" id="headingOne">--}}
+            {{--<h4 class="panel-title">--}}
+            {{--<a data-toggle="collapse" href="#" aria-expanded="true" aria-controls="collapseOne"--}}
+            {{--class="link_name collapsed">--}}
+            {{--No Pages--}}
+            {{--</a>--}}
+            {{--</h4>--}}
+            {{--</div>--}}
+            {{--</li>--}}
+            {{--@endif--}}
             {{--</div>--}}
 
             {{--<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 buttons page-data">--}}
-{{--                @include('manage::frontend.pages._partials.page-data')--}}
+            {{--                @include('manage::frontend.pages._partials.page-data')--}}
 
             {{--</div>--}}
 
@@ -96,14 +96,14 @@
 
             $("body").on('click', '[data-collapse]', function () {
                 var id = $(this).attr('data-collapse');
-                $('li[data-id='+id+'] ol').slideToggle();
+                $('li[data-id=' + id + '] ol').slideToggle();
                 $(this).toggleClass('fa-minus fa-plus');
             });
 
             $("body").on('click', 'li[data-id] .listinginfo', function () {
                 var item_id = $(this).parent('li[data-id]').attr('data-id');
                 $('.pagelisting .listinginfo.active_class').removeClass('active_class');
-                $('li[data-id='+item_id+'] > .listinginfo').addClass('active_class');
+                $('li[data-id=' + item_id + '] > .listinginfo').addClass('active_class');
 
             });
             $("body").on('change', '.select-type', function () {
@@ -219,6 +219,7 @@
                 })
             }
             fixbar()
+
             function fixbar() {
                 var targetselector = $('.vertical-text');
                 if (targetselector.length > 0) {

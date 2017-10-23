@@ -15,8 +15,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Response;
 use Sahakavatar\Cms\Helpers\helpers;
+use Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts;
 use Sahakavatar\Cms\Models\ContentLayouts\MainBody;
 use Sahakavatar\Cms\Services\CmsItemReader;
+use Sahakavatar\Cms\Services\HookService;
 use Sahakavatar\Console\Repository\FrontPagesRepository;
 use Sahakavatar\Manage\Models\FrontendPage;
 use Sahakavatar\Manage\Repository\ClassifierRepository;
@@ -24,6 +26,7 @@ use Sahakavatar\Manage\Services\ClassifierService;
 use Sahakavatar\Manage\Services\FrontendPageService;
 use Sahakavatar\Modules\Models\Fields;
 use Sahakavatar\Settings\Models\Settings;
+use Sahakavatar\User\Services\RoleService;
 use Sahakavatar\User\Services\UserService;
 use Validator;
 use View;
@@ -54,9 +57,10 @@ class PagesController extends Controller
      * @param Termrepository $term
      * @param WidgetRepository $widgetRepository
      */
-    public function __construct()
+    public function __construct(Settings $settings)
     {
         $this->helpers = new helpers;
+        $this->settings = $settings;
         $this->home = '/admin/manage/frontend/pages';
     }
 
@@ -124,7 +128,8 @@ class PagesController extends Controller
         UserService $userService,
         ClassifierRepository $classifierRepository,
         ClassifierService $classifierService,
-        FrontendPageService $frontendPageService
+        FrontendPageService $frontendPageService,
+        RoleService $roleService
     )
     {
         $id = $request->id;
@@ -134,7 +139,9 @@ class PagesController extends Controller
         $classifies = $classifierRepository->getAll();
         $classifierPageRelations = $classifierService->getClassifierPageRelations($page->id);
         $placeholders = $frontendPageService->getPlaceholdersInUrl($page->page_layout_settings);
-        return view('manage::frontend.pages.general', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders']));
+        $roles = $frontPagesRepository->getRolesByParent($id, true);
+
+        return view('manage::frontend.pages.general', compact(['page', 'admins', 'tags', 'id', 'classifies', 'classifierPageRelations', 'placeholders', 'roles']));
     }
 
     public function postSettings(Request $request, FrontendPageService $frontendPageService)
@@ -146,7 +153,7 @@ class PagesController extends Controller
                 . $updatedPage->page_layout
                 . '&'
                 . $frontendPageService->getPlaceholdersInUrl($updatedPage->page_layout_settings)
-                .'&content_type='.$request->get('content_type').'&template='.$request->get('template'));
+                . '&content_type=' . $request->get('content_type') . '&template=' . $request->get('template'));
         }
         return redirect()->back()->with('message', 'Page settings has been saved successfully.');
     }
@@ -514,4 +521,31 @@ class PagesController extends Controller
 
         return \Response::json(['error' => true, 'message' => 'Form not found']);
     }
+
+    public function liveSettings(Request $request)
+    {
+        \Session::put('live_pages', [$request->id => $request->except('_token')]);
+        return Response::json(['success' => true]);
+    }
+
+    public function postPageLive($id)
+    {
+        $page = FrontendPage::find($id);
+        $session = \Session::get('live_pages');
+        $settings = $session[$id]['page_layout_settings'];
+        if (isset($session[$id]['live_edit']) && $session[$id]['live_edit'] == "live_edit") {
+            $data = $session[$id];
+            $model = ContentLayouts::findByVariation($data['page_layout']);
+            $html = $model->render($settings);
+            $settingsHtml = view('manage::frontend.pages._partials.settings_preview', compact(['settings', 'model', 'page']))->render();
+            return view('manage::frontend.pages._partials.live_preview', compact(['html', 'model', 'settingsHtml', 'page']));
+        }
+
+        $page->page_layout = $session[$id]['page_layout'];
+        $page->header = $session[$id]['header'];
+        $page->footer = $session[$id]['footer'];
+        return view('cms::front_pages', compact(['settings', 'page']));
+
+    }
+
 }

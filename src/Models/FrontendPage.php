@@ -8,10 +8,9 @@
 
 namespace Sahakavatar\Manage\Models;
 
-use Sahakavatar\Cms\Models\Urlmanager;
-use Sahakavatar\Settings\Models\Settings;
-use Sahakavatar\User\Models\Membership;
 use Illuminate\Database\Eloquent\Model;
+use Sahakavatar\Cms\Models\Urlmanager;
+use Sahakavatar\User\Models\Membership;
 
 /**
  * Class FrontendPage
@@ -33,97 +32,23 @@ class FrontendPage extends Model
         'page_layout_settings' => 'json'
     ];
 
-    protected static function boot ()
+    public static function addTags($tags, $id)
     {
+        $tags = explode(',', $tags);
+        $page = self::find($id);
 
-        parent::boot();
-        static::deleting(
-            function ($model) {
-                if(count($model->childs)){
-                    foreach ($model->childs as $child){
-                        $child->delete();
-                    }
-                }
-                if ($model->urlmanager) {
-                    $manager = $model->urlmanager;
-                    $manager->delete();
-                }
-            }
-        );
-
-        static::created(
-            function ($model) {
-                Urlmanager::create([
-                    'front_page_id' => $model->id,
-                    'type' => $model->type,
-                    'url' => $model->url
-                ]);
-            }
-        );
-
-        static::updated(
-            function ($model) {
-                $url = Urlmanager::where('front_page_id',$model->id)->first();
-                if(!$url){
-                    $url=Urlmanager::create(['front_page_id'=>$model->id,'url'=>$model->url,'type'=>$model->type]);
-                }else{
-                    $url->update([
-                        'url' => $model->url
-                    ]);
+        if (count($tags) && $page) {
+            foreach ($tags as $tag) {
+                $isTag = Tag::where('name', $tag)->first();
+                if (!$isTag) {
+                    $isTag = Tag::create(['name' => $tag]);
                 }
 
+                if (!$isTag->pages()->where('frontend_page_id', $id)->first()) {
+                    $page->tags()->attach($isTag, ['id' => uniqid()]);
+                }
             }
-        );
-    }
-
-    public function permission_membership()
-    {
-        return $this->hasMany('Sahakavatar\User\Models\MembershipPermissions', 'page_id', 'id');
-    }
-
-    public function permission_role()
-    {
-        return $this->hasMany('Sahakavatar\User\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
-    }
-
-    /**
-     * @param $query
-     */
-    public function scopeMain($query)
-    {
-        return $query->where('parent_id', NULL);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function parent()
-    {
-        return $this->belongsTo(FrontendPage::class, 'parent_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function childs()
-    {
-        return $this->hasMany(FrontendPage::class, 'parent_id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function editor()
-    {
-        return $this->belongsTo('Sahakavatar\User\User', 'edited_by', 'id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function author()
-    {
-        return $this->belongsTo('Sahakavatar\User\User', 'user_id', 'id');
+        }
     }
 
     /**
@@ -131,34 +56,7 @@ class FrontendPage extends Model
      */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class, 'frontend_pages_tags','frontend_page_id','tags_id','id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function urlManager()
-    {
-        return $this->hasOne(Urlmanager::class, 'front_page_id');
-    }
-
-    public static function addTags($tags,$id)
-    {
-        $tags = explode(',',$tags);
-        $page = self::find($id);
-
-        if(count($tags) && $page){
-            foreach($tags as $tag){
-                $isTag = Tag::where('name',$tag)->first();
-                if(! $isTag){
-                    $isTag = Tag::create(['name' => $tag]);
-                }
-
-                if(! $isTag->pages()->where('frontend_page_id',$id)->first()){
-                    $page->tags()->attach($isTag, ['id' => uniqid()]);
-                }
-            }
-        }
+        return $this->belongsToMany(Tag::class, 'frontend_pages_tags', 'frontend_page_id', 'tags_id', 'id');
     }
 
     public static function getMembershipByPage($id, $imploded = true)
@@ -229,55 +127,120 @@ class FrontendPage extends Model
         }
     }
 
-    public static function checkAccess($page,$membership_slug){
-        $membership = Membership::where('slug',$membership_slug)->first();
-        if($page && $membership){
+    public static function checkAccess($page, $membership_slug)
+    {
+        $membership = Membership::where('slug', $membership_slug)->first();
+        if ($page && $membership) {
             $access = $page->permission_membership()->where('membership_id', $membership->id)->first();
-            if($access) return true;
+            if ($access) return true;
         }
 
         return false;
     }
 
-    public static function PagesByModulesParent($module){
-        return self::where('module_id',$module->slug)->where('parent_id',NULL)->get();
+    public static function PagesByModulesParent($module)
+    {
+        return self::where('module_id', $module->slug)->where('parent_id', NULL)->get();
     }
 
-//    public static function addNewPage($parentID = null)
-//    {
-//        $parent = null;
-//        if($parentID){
-//            $parent = self::find($parentID);
-//            if(! $parent){
-//                return false;
-//            }
-//        }
-//
-//        $header_enabled = Settings::where('settingkey', 'header_enabled')->first();
-//        $footer_enabled = Settings::where('settingkey', 'footer_enabled')->first();
-//        $defaultPageLayout = Settings::where('settingkey', 'frontend_page_section')->first();
-//        $slug = uniqid();
-//        $new = self::create([
-//            'user_id' => \Auth::id(),
-//            'title' => 'New Page',
-//            'slug' => $slug,
-//            'header' => ($header_enabled) ? $header_enabled->val : 0,
-//            'footer' => ($footer_enabled) ? $footer_enabled->val : 0,
-//            'page_layout' => $defaultPageLayout->val,
-//            'url' => '',
-//            'parent_id' => ($parent) ? $parent->id : null,
-//            'type' => 'custom'
-//        ]);
-//        $new->update([
-//            'url' => '/new-page(' . $new->id . ')',
-//        ]);
-//
-//        return $new;
-//    }
-//
-//    public function getPlaceholdersInUrl() {
-//        if($this->page_layout_settings) {
-//            return http_build_query($this->page_layout_settings);
-//        }
-//    }
+    protected static function boot()
+    {
+
+        parent::boot();
+        static::deleting(
+            function ($model) {
+                if (count($model->childs)) {
+                    foreach ($model->childs as $child) {
+                        $child->delete();
+                    }
+                }
+                if ($model->urlmanager) {
+                    $manager = $model->urlmanager;
+                    $manager->delete();
+                }
+            }
+        );
+
+        static::created(
+            function ($model) {
+                Urlmanager::create([
+                    'front_page_id' => $model->id,
+                    'type' => $model->type,
+                    'url' => $model->url
+                ]);
+            }
+        );
+
+        static::updated(
+            function ($model) {
+                $url = Urlmanager::where('front_page_id', $model->id)->first();
+                if (!$url) {
+                    $url = Urlmanager::create(['front_page_id' => $model->id, 'url' => $model->url, 'type' => $model->type]);
+                } else {
+                    $url->update([
+                        'url' => $model->url
+                    ]);
+                }
+
+            }
+        );
+    }
+
+    public function permission_membership()
+    {
+        return $this->hasMany('Sahakavatar\User\Models\MembershipPermissions', 'page_id', 'id');
+    }
+
+    public function permission_role()
+    {
+        return $this->hasMany('Sahakavatar\User\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
+    }
+
+    /**
+     * @param $query
+     */
+    public function scopeMain($query)
+    {
+        return $query->where('parent_id', NULL);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(FrontendPage::class, 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function childs()
+    {
+        return $this->hasMany(FrontendPage::class, 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function editor()
+    {
+        return $this->belongsTo('Sahakavatar\User\User', 'edited_by', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo('Sahakavatar\User\User', 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function urlManager()
+    {
+        return $this->hasOne(Urlmanager::class, 'front_page_id');
+    }
 }

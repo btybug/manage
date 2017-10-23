@@ -24,24 +24,20 @@
                                     {!! Form::model($system,['class' => 'form-horizontal','files' => true]) !!}
                                     <fieldset>
                                         <div class="col-md-12">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
-                                                           for="textarea">Default Header</label>
-                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                        {!! BBbutton2('unit','header_tpl','frontend_header','Select Header',['class' => 'form-control input-md btn-danger','data-type' => 'header','model' =>$system]) !!}
+                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                                                        {!! BBbutton2('unit','header_tpl','frontend_header','Select Header',['class' => 'form-control input-md btn-info','data-type' => 'header','model' =>$system]) !!}
                                                     </div>
-                                                    <div class="for_button_1 col-xs-6 col-sm-6 col-md-6 col-lg-3">
+                                                    <div class="for_button_1 col-xs-6 col-sm-6 col-md-2 col-lg-3">
                                                         <input type="hidden" name="header_enabled" value="0">
                                                         {!! Form::checkbox('header_enabled', 1, null, ['id' => 'page_header_active', ]) !!}
                                                         <label for="page_header_active">Enabled</label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
-                                                           for="textarea">Default Footer</label>
-                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-6">
-                                                        {!! BBbutton2('unit','footer_tpl','frontend_footer','Select Footer',['class' => 'form-control input-md btn-danger','data-type' => 'footer','model' =>$system]) !!}
+                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
+                                                        {!! BBbutton2('unit','footer_tpl','frontend_footer','Select Footer',['class' => 'form-control input-md btn-info','data-type' => 'footer','model' =>$system]) !!}
                                                     </div>
                                                     <div class="for_button_1 col-xs-6 col-sm-6 col-md-6 col-lg-3">
                                                         <input type="hidden" name="footer_enabled" value="0">
@@ -51,8 +47,7 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
-                                                           for="textarea">Default Field Html</label>
+
                                                     <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
                                                         {!! BBbutton('units','default_field_html','Select Field Html',[
                                                             'class' => 'form-control input-md btn-success',
@@ -62,45 +57,19 @@
                                                         ]) !!}
                                                     </div>
                                                 </div>
-
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
-                                                           for="textarea">Default Page Layout</label>
-                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
-                                                        {!! BBbutton2('layouts','frontend_page_section','front_pages_layout','Select Page Layout',['class' => 'form-control input-md btn-danger','data-type' => 'frontend','model' =>$system]) !!}
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"
-                                                           for="textarea">Active Profile</label>
-                                                    <div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">
-                                                        {!! BBbutton('profiles','active_profile','Select Profile',['class' => 'form-control input-md btn-danger','data-type' => 'frontlayouts','model' =>$system]) !!}
-                                                    </div>
+                                                    {!!Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts::getDefaultLayoutPlaceholders($system) !!}
                                                 </div>
                                             </div>
                                         </div>
-
-
-                                        {{--<div class="form-group">--}}
-                                            {{--<label class="control-label col-xs-12 col-sm-12 col-md-12 col-lg-3"--}}
-                                                   {{--for="textarea">Active Theme</label>--}}
-                                            {{--<div class="for_button_1 col-xs-12 col-sm-12 col-md-12 col-lg-9">--}}
-                                                {{--{!! BBbutton('templates','layout','Select Theme',['class' => 'form-control input-md btn-danger','data-type' => 'frontlayouts','model' =>$system]) !!}--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-
-
-
                                         <!-- Button -->
                                         <div class="form-group">
                                             {{--<div class="col-md-12 for_save_btn">--}}
                                             {!! Form::submit('Save',['class' => 'btn btn-primary']) !!}
                                             {{--</div>--}}
                                         </div>
-
                                     </fieldset>
                                     {!! Form::close() !!}
                                 </div>
@@ -118,6 +87,7 @@
     {!! HTML::style('css/admin_pages.css') !!}
     {!! HTML::style('css/tool-css.css?v=0.23') !!}
     {!! HTML::style('css/page.css?v=0.15') !!}
+
 @stop
 
 
@@ -127,4 +97,6 @@
     {!! HTML::script('js/nestedSortable/jquery.mjs.nestedSortable.js') !!}
     {!! HTML::script('js/bootbox/js/bootbox.min.js') !!}
     {!! HTML::script('js/icon-plugin.js?v=0.4') !!}
+    {!! HTML::script('/js/tinymice/tinymce.min.js') !!}
+    {!! HTML::script('/js/page-setting.js') !!}
 @stop

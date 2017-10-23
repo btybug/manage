@@ -20,8 +20,10 @@
                             <option value="hor">horizontal</option>
                         </select>
                     </td>
-                    <td class="col-md-8"> <input type="text" name="name" class="form-control"/></td>
-                    <td class="col-md-2"><select name="group" class="form-control"><option value=""></option></select></td>
+                    <td class="col-md-8"><input type="text" name="name" class="form-control"/></td>
+                    <td class="col-md-2"><select name="group" class="form-control">
+                            <option value=""></option>
+                        </select></td>
 
                 </tbody>
             </table>
@@ -61,9 +63,9 @@
 
         </div>
         <div>
-        
-        <textarea data-export="json"></textarea>
-        <pre id="toHierarchyOutput"></pre>
+
+            <textarea data-export="json"></textarea>
+            <pre id="toHierarchyOutput"></pre>
 
             @stop
             @section('CSS')
@@ -104,64 +106,62 @@
                 <script>
 
 
+                    $(function () {
 
-                   $(function() {
-                       
-                        function retunjson(selector){
-                           var data = []
-                           selector.each(function(index, element) {
-                                   var getdetail = {};
-                                   if( $(this).attr('id')){
-                                     getdetail['id'] = $(this).attr('id')
-                                   }
-                                   if($(this).children('ol').is('ol')){
+                        function retunjson(selector) {
+                            var data = []
+                            selector.each(function (index, element) {
+                                var getdetail = {};
+                                if ($(this).attr('id')) {
+                                    getdetail['id'] = $(this).attr('id')
+                                }
+                                if ($(this).children('ol').is('ol')) {
                                     getdetail['children'] = retunjson($(this).children('ol').children('li'))
-                                   }
-                                  if(getdetail){
+                                }
+                                if (getdetail) {
                                     data.push(getdetail);
-                                  }
+                                }
                             });
                             return data;
-                            
+
                         }
-                        function exportjson(){
-                          var hiered = retunjson($('#sortable2 > li'));                               
+
+                        function exportjson() {
+                            var hiered = retunjson($('#sortable2 > li'));
                             $('[data-export="json"]').val(JSON.stringify(hiered))
                         }
-                      
+
                         $('#sortable2').nestedSortable({
                             handle: 'div',
                             items: 'li',
                             toleranceElement: '> div',
-                            update: function(event, ui) {
+                            update: function (event, ui) {
                                 exportjson()
 
                             }
-                    });
+                        });
 
 //                        $("#sortable1,#sortable4,#sortable").sortable({
 //                            connectWith: ".connectedSortable"
 //                        }).disableSelection();
 
-                        $( "#sortable").css({
-                            "min-height":'300px'
+                        $("#sortable").css({
+                            "min-height": '300px'
                         })
-                 
-              
-                    
-                        $( "ol.droptrue" ).sortable({
+
+
+                        $("ol.droptrue").sortable({
                             connectWith: "ol"
                         });
-                        
-                        $( "ol.dropfalse" ).sortable({
+
+                        $("ol.dropfalse").sortable({
                             connectWith: "ol",
                             dropOnEmpty: true
 
                         });
 
-                        
 
-                    } );
+                    });
                 </script>
 
 @stop

@@ -8,13 +8,11 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Sahakavatar\Settings\Models\Settings;
 use Sahakavatar\Manage\Models\EmailGroups;
 use Sahakavatar\Manage\Models\Emails;
 use Sahakavatar\Modules\Models\Forms;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 
 class EmailsController extends Controller
@@ -92,7 +90,7 @@ class EmailsController extends Controller
     {
         $forms = Forms::all()->pluck('name', 'slug')->toArray();
         $email = Emails::findOrFail($id);
-        return view('manage::emails.update', compact('email','forms'));
+        return view('manage::emails.update', compact('email', 'forms'));
     }
 
     public function postUpdate(Request $request)
@@ -192,7 +190,7 @@ class EmailsController extends Controller
                     'val' => self::INVALID
                 ]);
             }
-            return \Response::json(['code' => self::INVALID,'message'=>$e->getMessage()]);
+            return \Response::json(['code' => self::INVALID, 'message' => $e->getMessage()]);
         }
         if (Setting::where('section', 'mail_settings')->where('settingkey', 'is_invalid')->exists()) {
             Setting::where('section', 'mail_settings')->where('settingkey', 'is_invalid')->update([
@@ -210,13 +208,14 @@ class EmailsController extends Controller
         return \Response::json(['code' => self::VALID]);
     }
 
-    public function getFormShortcodes(Request $request) {
+    public function getFormShortcodes(Request $request)
+    {
         $shortcodes = [];
         $form = Forms::where('slug', $request->form_slug)->first();
-        if($form) {
+        if ($form) {
             $tableData = BBGetTableColumn($form->fields_type);
-            foreach($tableData as $column)
-            $shortcodes[$column] = '[special key=' . $column . ']';
+            foreach ($tableData as $column)
+                $shortcodes[$column] = '[special key=' . $column . ']';
         }
         $html = view('manage::emails._partial.specific_shortcodes', compact(['shortcodes']))->render();
         return \Response::json(['html' => $html]);

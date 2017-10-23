@@ -1,10 +1,18 @@
 @extends('cms::layouts.admin')
 @section('content')
     <div class="row">
-        <a href="{!! url('admin/manage/frontend/general') !!}"><div class="pages col-md-5">General</div></a>
-        <a href="{!! url('admin/manage/frontend/pages') !!}"><div class="pages col-md-5">Pages</div></a>
-        <a href="{!! url('admin/manage/frontend/menus') !!}"><div class="pages col-md-5">Menus</div></a>
-        <a href="{!! url('admin/manage/frontend/classify') !!}"><div class="pages col-md-5">Classify</div></a>
+        <a href="{!! url('admin/manage/frontend/general') !!}">
+            <div class="pages col-md-5">General</div>
+        </a>
+        <a href="{!! url('admin/manage/frontend/pages') !!}">
+            <div class="pages col-md-5">Pages</div>
+        </a>
+        <a href="{!! url('admin/manage/frontend/menus') !!}">
+            <div class="pages col-md-5">Menus</div>
+        </a>
+        <a href="{!! url('admin/manage/frontend/classify') !!}">
+            <div class="pages col-md-5">Classify</div>
+        </a>
     </div>
 @stop
 @section('CSS')

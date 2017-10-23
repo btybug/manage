@@ -11,10 +11,10 @@
                         id="iframeinfor"></iframe>
             @else
                 {{--<iframe src="{{ $data['url'].'?pl='. $data['layout'].'&page_id='.$data['page_id'].'&mw='.$data['main_view'] }}"--}}
-                        {{--id="iframeinfor">--}}
+                {{--id="iframeinfor">--}}
 
                 {{--</iframe>--}}
-                    <iframe src="http://www.bbc.com/"
+                <iframe src="http://www.bbc.com/"
                         id="iframeinfor"></iframe>
             @endif
 
@@ -43,36 +43,36 @@
     <script>
         $(document).ready(function () {
             $('body').on('click', '.item', function () {
-				var datasetting = $('[datas-settingjson]').val();
-				var pagelsod = $(this).find('input').attr('data-action');
-				if(pagelsod === "page_sections"){
-					if($(this).hasClass('m-item')){
-						var mw = $(this).data('value');
-						if(mw){
-							var currentUrl = window.location.pathname;
-							var pl = findGetParameter('pl');
-							if(pl){
-							   var url = currentUrl + "?mw=" + mw + "&pl="+pl+'&pl_live_settings=page_live';
-							}else{
-								var url = currentUrl + "?mw=" + mw + '&pl_live_settings=page_live';
-							}
-							window.location.href = url
-						}
-					}else{
-						var layoutID = $(this).data('value');
-						if(layoutID){
-							var currentUrl = window.location.pathname;
-							var mw = findGetParameter('mw');
-							if(mw){
-								var url = currentUrl + "?mw=" + mw +  "&pl="+layoutID+'&pl_live_settings=page_live';
-							}else{
-								var url = currentUrl + "?pl="+layoutID+'&pl_live_settings=page_live';
-							}
-							window.location.href = url;
-						}
-					}
-				}
-				
+                var datasetting = $('[datas-settingjson]').val();
+                var pagelsod = $(this).find('input').attr('data-action');
+                if (pagelsod === "page_sections") {
+                    if ($(this).hasClass('m-item')) {
+                        var mw = $(this).data('value');
+                        if (mw) {
+                            var currentUrl = window.location.pathname;
+                            var pl = findGetParameter('pl');
+                            if (pl) {
+                                var url = currentUrl + "?mw=" + mw + "&pl=" + pl + '&pl_live_settings=page_live';
+                            } else {
+                                var url = currentUrl + "?mw=" + mw + '&pl_live_settings=page_live';
+                            }
+                            window.location.href = url
+                        }
+                    } else {
+                        var layoutID = $(this).data('value');
+                        if (layoutID) {
+                            var currentUrl = window.location.pathname;
+                            var mw = findGetParameter('mw');
+                            if (mw) {
+                                var url = currentUrl + "?mw=" + mw + "&pl=" + layoutID + '&pl_live_settings=page_live';
+                            } else {
+                                var url = currentUrl + "?pl=" + layoutID + '&pl_live_settings=page_live';
+                            }
+                            window.location.href = url;
+                        }
+                    }
+                }
+
             });
 
             function findGetParameter(parameterName) {

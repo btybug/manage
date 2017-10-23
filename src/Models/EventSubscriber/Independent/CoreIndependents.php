@@ -12,9 +12,10 @@ namespace Sahakavatar\Manage\Models\EventSubscriber\Independent;
 class CoreIndependents extends Independent
 {
 
-    public function Notification($event,$settings){
-        \Session::put('alert-class','alert-'.$settings['alert_class']);
-        \Session::put('message',$settings['message']);
+    public function Notification($event, $settings)
+    {
+        \Session::put('alert-class', 'alert-' . $settings['alert_class']);
+        \Session::put('message', $settings['message']);
     }
 
     public function NotificationForm()
@@ -23,7 +24,7 @@ class CoreIndependents extends Independent
             'alert_class' => [
                 'type' => 'select',
                 'label' => 'Alert class',
-                'data' => ['success'=>'Success','info'=>'Info','warning'=>'Warning','danger'=>'Danger'],
+                'data' => ['success' => 'Success', 'info' => 'Info', 'warning' => 'Warning', 'danger' => 'Danger'],
                 'value' => 'success'
             ],
             'message' => [
@@ -35,14 +36,15 @@ class CoreIndependents extends Independent
         ];
     }
 
-    public function DatesBetween($event, $settings){
-        if(isset($settings['start_date'])) {
+    public function DatesBetween($event, $settings)
+    {
+        if (isset($settings['start_date'])) {
             $end = $settings['end_date'] == 'now' ? time() : strtotime($settings['end_date']);
             $start = strtotime($settings['start_date']);
             $difference = $end - $start;
-            switch($settings['result_type']) {
+            switch ($settings['result_type']) {
                 case 'hours':
-                    return round($difference/3600, 1);
+                    return round($difference / 3600, 1);
                     break;
                 case 'seconds':
                     return $difference;
@@ -70,16 +72,17 @@ class CoreIndependents extends Independent
             'result_type' => [
                 'type' => 'select',
                 'label' => 'Number of',
-                'data' => ['days'=>'Days','hours'=>'Hours','seconds'=>'Seconds'],
+                'data' => ['days' => 'Days', 'hours' => 'Hours', 'seconds' => 'Seconds'],
                 'value' => 'days'
             ],
         ];
     }
 
-    public function checkUserAge($event, $settings){
-        if(isset($settings['age']) && Auth::check()
+    public function checkUserAge($event, $settings)
+    {
+        if (isset($settings['age']) && Auth::check()
             && \Auth::user()->profile->age && \Auth::user()->profile->age < $settings['age']) {
-            switch($settings['move_to']) {
+            switch ($settings['move_to']) {
                 case '404':
                     abort(404);
                     break;
@@ -103,7 +106,7 @@ class CoreIndependents extends Independent
             'move_to' => [
                 'type' => 'select',
                 'label' => 'If < age',
-                'data' => ['404'=>'Not found(404)', '403'=>'Access Denied(403)', 'logout'=>'Logout'],
+                'data' => ['404' => 'Not found(404)', '403' => 'Access Denied(403)', 'logout' => 'Logout'],
                 'value' => '403'
             ],
         ];

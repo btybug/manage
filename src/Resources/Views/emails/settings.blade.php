@@ -12,7 +12,7 @@
                             <td width="30%">
                                 <div class="p-t-5">Email Driver</div>
                             </td>
-                            <td >
+                            <td>
                                 {!! Form::select('driver',['smtp'=>'SMTP','mail'=>'Mail'],null,['class'=>'form-control']) !!}
                             </td>
                         </tr>
@@ -34,7 +34,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td >
+                            <td>
                                 <div class="p-t-5">From Email</div>
                             </td>
                             <td>
@@ -55,23 +55,23 @@
                             <td>
                                 <div class="p-t-5">SMTP User Name</div>
                             </td>
-                            <td >
+                            <td>
                                 {!! Form::text('username',null,['class'=>'form-control','placeholder'=>'SMTP server user name']) !!}
                             </td>
                         </tr>
 
                         <tr>
-                            <td >
+                            <td>
                                 <div class="p-t-5">SMTP User Password</div>
                             </td>
-                            <td >
+                            <td>
                                 <input class="form-control" name="password" placeholder="SMTP server Password"
                                        value="{!! $model['password'] or null !!}" type="password">
                             </td>
                         </tr>
                         <tr>
-                            <td ></td>
-                            <td ><input class="btn btn-success  p-r-30 p-l-30" value="Save" type="submit">
+                            <td></td>
+                            <td><input class="btn btn-success  p-r-30 p-l-30" value="Save" type="submit">
                             </td>
                         </tr>
 
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-sm-4">
             <div class="panel panel-default p-0">
                 <div class="panel-heading bg-black-darker text-white">Confirm Settings</div>
@@ -91,7 +91,7 @@
                         <tbody>
                         <tr>
 
-                           
+
                             <td colspan="2">
                                 @if(!isset($model['is_invalid']) || $model['is_invalid']=='2' )
                                     <div class="led-box">
@@ -123,8 +123,8 @@
                                 </td>
                             </tr>
                             <tr class="deletable">
-                                <td ></td>
-                                <td >
+                                <td></td>
+                                <td>
                                     <input class="btn btn-success  p-r-30 p-l-30 check-email-settings"
                                            value="Check" type="button"></td>
                             </tr>
@@ -135,7 +135,7 @@
             </div>
         </div>
     </div>
-    
+
 @stop
 @section('CSS')
     <style>
@@ -207,23 +207,20 @@
 
         @-ms-keyframes blinkRed {
 
-        from {
-            background-color: #F00;
-        }
+            from {
+                background-color: #F00;
+            }
 
-        50
-        %
-        {
-            background-color: #A00
-        ;
-            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0
-        ;
-        }
-        to {
-            background-color: #F00;
-        }
+            50% {
+                background-color: #A00;
+                box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #441313 0 -1px 9px, rgba(255, 0, 0, 0.5) 0 2px 0;
+            }
+            to {
+                background-color: #F00;
+            }
 
         }
+
         @-o-keyframes blinkRed {
             from {
                 background-color: #F00;
@@ -292,23 +289,20 @@
 
         @-ms-keyframes blinkYellow {
 
-        from {
-            background-color: #FF0;
-        }
+            from {
+                background-color: #FF0;
+            }
 
-        50
-        %
-        {
-            background-color: #AA0
-        ;
-            box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0
-        ;
-        }
-        to {
-            background-color: #FF0;
-        }
+            50% {
+                background-color: #AA0;
+                box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 7px 1px, inset #808002 0 -1px 9px, #FF0 0 2px 0;
+            }
+            to {
+                background-color: #FF0;
+            }
 
         }
+
         @-o-keyframes blinkYellow {
             from {
                 background-color: #FF0;
@@ -371,7 +365,8 @@
                             $('.led-box').html('<div class="led-red"></div>');
                             $('.led-message').text('settings are invalid');
                             break;
-                    };
+                    }
+                    ;
                 }
                 postAjax('/admin/manage/emails/check-email-settings', data, callBack);
             })

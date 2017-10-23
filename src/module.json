@@ -1,13 +1,13 @@
 {
-    "name": "Manage",
-    "slug": "manage",
-    "version": "1.0",
-    "type":"core",
-    "author":"Terakyan",
-    "title":"Manage",
-    "author_site":"http://dev.bootydev.co.uk/",
-    "description": "This is the description for the Manage module.",
-    "enabled": true,
-    "created_at": "19-01-2017 19:24",
-    "tables":[]
+  "name": "Manage",
+  "slug": "manage",
+  "version": "1.0",
+  "type": "core",
+  "author": "Terakyan",
+  "title": "Manage",
+  "author_site": "http://dev.bootydev.co.uk/",
+  "description": "This is the description for the Manage module.",
+  "enabled": true,
+  "created_at": "19-01-2017 19:24",
+  "tables": []
 }

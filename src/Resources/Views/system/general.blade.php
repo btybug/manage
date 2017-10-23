@@ -126,13 +126,13 @@
     {!! HTML::script('js/bootbox/js/bootbox.min.js') !!}
     {!! HTML::script('js/icon-plugin.js?v=0.4') !!}
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
 
-            $('body').on('change', '.enable_registration', function() {
-                if($(this).val() == "1") {
+            $('body').on('change', '.enable_registration', function () {
+                if ($(this).val() == "1") {
                     $('.show-member-access').removeClass('hide').addClass('show');
                     $('.email-activation-div').removeClass('hidden');
-                }else {
+                } else {
                     $('.show-member-access').removeClass('show').addClass('hide');
                     $('.email-activation-div').addClass('hidden');
                 }

@@ -11,34 +11,34 @@
 |
 */
 
-Route::get('/', function() {
+Route::get('/', function () {
     return view("manage::index");
 });
 
-Route::group(['prefix' => 'event'],function () {
-    Route::get('/','EventsController@getIndex');
-    Route::post('/get-function-data','EventsController@postGetFunctionData');
-    Route::post('/get-event-function-relations','EventsController@postGetEventFunctionRelation');
-    Route::post('/save-event-function-relations','EventsController@postSaveEventFunctionRelation');
+Route::group(['prefix' => 'event'], function () {
+    Route::get('/', 'EventsController@getIndex');
+    Route::post('/get-function-data', 'EventsController@postGetFunctionData');
+    Route::post('/get-event-function-relations', 'EventsController@postGetEventFunctionRelation');
+    Route::post('/save-event-function-relations', 'EventsController@postSaveEventFunctionRelation');
 });
-Route::get('/test/{id?}',function (\Illuminate\Http\Request $request){
-    $v_id=$request->id;
-    return view('test',compact('v_id'));
+Route::get('/test/{id?}', function (\Illuminate\Http\Request $request) {
+    $v_id = $request->id;
+    return view('test', compact('v_id'));
 });
 
-Route::get('/test-unit/{id?}',function (\Illuminate\Http\Request $request){
-    $v_id=$request->id;
-    return view('test-unit',compact('v_id'));
+Route::get('/test-unit/{id?}', function (\Illuminate\Http\Request $request) {
+    $v_id = $request->id;
+    return view('test-unit', compact('v_id'));
 });
 //Route::get('/frontend', function() {
 //    return view("manage::frontend");
 //});
-Route::get('/structure', function() {
+Route::get('/structure', function () {
     return view("manage::structure");
 });
 
-Route::group(['prefix' => 'system'],function () {
-    Route::get('/form-test','FormTestController@getIndex');
+Route::group(['prefix' => 'system'], function () {
+    Route::get('/form-test', 'FormTestController@getIndex');
     Route::get('/', 'SystemController@getIndex');
     Route::post('/', 'SystemController@storeSystem');
     Route::get('/login-registration', 'SystemController@getLoginRegistration');
@@ -49,18 +49,24 @@ Route::group(['prefix' => 'system'],function () {
     Route::get('/api-settings', 'SystemController@getApi');
 });
 
-Route::group(['prefix' => 'frontend'],function () {
+Route::group(['prefix' => 'frontend'], function () {
 
-    Route::group(['prefix' => 'general'],function () {
+    Route::group(['prefix' => 'general'], function () {
         Route::get('/', 'GeneralController@getIndex');
         Route::post('/', 'GeneralController@postSettings');
     });
 
-    Route::group(['prefix' => 'filters'],function () {
+    Route::group(['prefix' => 'filters'], function () {
         Route::get('/', 'FiltersController@getIndex');
     });
 
-    Route::group(['prefix' => 'pages'],function () {
+    Route::group(['prefix' => 'hooks'], function () {
+        Route::get('/', 'HooksController@getIndex');
+        Route::get('/edit/{id}', 'HooksController@getEdit');
+
+    });
+
+    Route::group(['prefix' => 'pages'], function () {
         //front pages
         Route::get('/', 'PagesController@getIndex');
 //        Route::post('/', 'PagesController@postEdit'); TODO delete
@@ -75,12 +81,15 @@ Route::group(['prefix' => 'frontend'],function () {
         Route::post('/get-data', 'PagesController@postData');
         Route::post('/delete', 'PagesController@postDelete');
 
-        Route::group(['prefix' => 'page-preview'],function () {
+        Route::group(['prefix' => 'page-preview'], function () {
             Route::get('/{id}', 'PagesController@getPagePreview');
             Route::post('/{id}', 'PagesController@postPagePreview');
         });
         Route::get('/page-test-preview/{id}', 'PagesController@getPageTestPreview');
         Route::post('/page-test-preview/{id}', 'PagesController@postPagePreview');
+
+        Route::post('/live-settings', 'PagesController@liveSettings');
+        Route::get('/live/{id}', 'PagesController@postPageLive');
 
         Route::post('/load-tpl', 'PagesController@loadTpl');
         Route::get('/preview/{layout_id?}/{page_id?}', 'PagesController@getPreview');
@@ -105,7 +114,7 @@ Route::group(['prefix' => 'frontend'],function () {
         Route::post('/partial-access/{id?}', 'PagesController@postPartialAccess');
         Route::post('/get-fields-by-group', 'PagesController@getFieldsByGroup');
     });
-    Route::group(['prefix' => 'classify'],function () {
+    Route::group(['prefix' => 'classify'], function () {
 
         Route::get('/', 'ClassifyController@getIndex');
         Route::post('/', 'ClassifyController@postEditTerm');
@@ -129,8 +138,8 @@ Route::group(['prefix' => 'frontend'],function () {
         Route::post('/generate-term', 'ClassifyController@postGenerateForm');
     });
 
-    Route::group(['prefix' => 'menus'],function () {
-        Route::get('/', 'MenuFrontController@getIndex');
+    Route::group(['prefix' => 'menus'], function () {
+        Route::get('/', 'MenusController@getIndex');
         Route::get('/create', 'MenuFrontController@getCreate');
         Route::post('/create', 'MenuFrontController@postCreate');
         Route::get('/update/{id}', 'MenuFrontController@getUpdate');
@@ -147,20 +156,20 @@ Route::group(['prefix' => 'frontend'],function () {
 
 
 });
-Route::group(['prefix'=>'emails'],function (){
-    Route::get('/settings',"EmailsController@getSettings");
-    Route::post('/settings',"EmailsController@postSettings");
-    Route::get('/update/{id?}',"EmailsController@getUpdate");
-    Route::post('/update/{id}',"EmailsController@postUpdate");
-    Route::get('/data/{id}',"EmailsController@getData");
-    Route::get('/{id?}',"EmailsController@getIndex");
+Route::group(['prefix' => 'emails'], function () {
+    Route::get('/settings', "EmailsController@getSettings");
+    Route::post('/settings', "EmailsController@postSettings");
+    Route::get('/update/{id?}', "EmailsController@getUpdate");
+    Route::post('/update/{id}', "EmailsController@postUpdate");
+    Route::get('/data/{id}', "EmailsController@getData");
+    Route::get('/{id?}', "EmailsController@getIndex");
 
-    Route::post('/create-group',"EmailsController@postCreateGroup");
-    Route::post('/get-forms-lists',"EmailsController@postGetFormLists");
-    Route::post('/get-forms-shortcodes',"EmailsController@getFormShortcodes");
-    Route::post('/create-email',"EmailsController@postCreateEmail");
-    Route::post('/delete-email/{id}',"EmailsController@postDeleteEmail");
-    Route::post('check-email-settings',"EmailsController@postCheckEmail");
+    Route::post('/create-group', "EmailsController@postCreateGroup");
+    Route::post('/get-forms-lists', "EmailsController@postGetFormLists");
+    Route::post('/get-forms-shortcodes', "EmailsController@getFormShortcodes");
+    Route::post('/create-email', "EmailsController@postCreateEmail");
+    Route::post('/delete-email/{id}', "EmailsController@postDeleteEmail");
+    Route::post('check-email-settings', "EmailsController@postCheckEmail");
 
 
 });

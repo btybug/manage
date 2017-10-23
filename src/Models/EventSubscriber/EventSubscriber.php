@@ -35,21 +35,6 @@ final class EventSubscriber
         }
     }
 
-    private function scopeSave()
-    {
-        $this->scopeGetSubscriptions()->save();
-        return $this;
-    }
-
-    protected function scopeGetSubscriptions()
-    {
-        return $this->subscribe->getAll();
-    }
-    protected function scopeGetEvents($lists=false)
-    {
-        return $this->subscribe->getAll()->getEvents($lists);
-    }
-
     public function delete()
     {
 
@@ -75,6 +60,22 @@ final class EventSubscriber
         }
     }
 
+    protected function scopeGetEvents($lists = false)
+    {
+        return $this->subscribe->getAll()->getEvents($lists);
+    }
+
+    private function scopeSave()
+    {
+        $this->scopeGetSubscriptions()->save();
+        return $this;
+    }
+
+    protected function scopeGetSubscriptions()
+    {
+        return $this->subscribe->getAll();
+    }
+
     private function scopeAdd($event, $action, $settings = [])
     {
         $this->subscribe->addAction($event, $action, $settings);
@@ -92,28 +93,34 @@ final class EventSubscriber
         $this->subscribe->addProperty($name, $namespace);
         return $this;
     }
-    private function scopeListen($events){
 
-       $data=$this->subscribe->getAll()->getData();
-       foreach ($data as $key=>$datum){
-           foreach ($datum as  $fname=>$fsettings){
-                   $events->listen($key,$fname);
-               }
-       }
-       return $events;
+    private function scopeListen($events)
+    {
+
+        $data = $this->subscribe->getAll()->getData();
+        foreach ($data as $key => $datum) {
+            foreach ($datum as $fname => $fsettings) {
+                $events->listen($key, $fname);
+            }
+        }
+        return $events;
 
     }
-    private function scopeGetForm($namespace){
-        $namespaceExploade=explode('@',$namespace);
-        $class=$namespaceExploade[0];
-        $method=$namespaceExploade[1].'Form';
-        $obj=new $class;
-        if (method_exists($obj, $method) && is_callable(array($obj, $method))){
-            return call_user_func_array([$obj,$method],[]);
+
+    private function scopeGetForm($namespace)
+    {
+        $namespaceExploade = explode('@', $namespace);
+        $class = $namespaceExploade[0];
+        $method = $namespaceExploade[1] . 'Form';
+        $obj = new $class;
+        if (method_exists($obj, $method) && is_callable(array($obj, $method))) {
+            return call_user_func_array([$obj, $method], []);
         }
         return [];
     }
-    private function scopeClean($event,$function){
-       return $this->subscribe->getAll()->cleaner($event,$function);
+
+    private function scopeClean($event, $function)
+    {
+        return $this->subscribe->getAll()->cleaner($event, $function);
     }
 }

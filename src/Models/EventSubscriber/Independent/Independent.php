@@ -22,19 +22,21 @@ abstract class Independent
             $namespace = static::class . '@' . $name;
             $subscribe = \Subscriber::getSubscriptions();
             $event = $arguments[0];
-            $data=$subscribe->getData();
-            $arguments[]=$this->recursive_array_search($namespace,$data[$event->namespace]);
-            return call_user_func_array([$this,$method], $arguments);
+            $data = $subscribe->getData();
+            $arguments[] = $this->recursive_array_search($namespace, $data[$event->namespace]);
+            return call_user_func_array([$this, $method], $arguments);
         } else {
             throw new Exception('Method not defined');
         }
     }
-    private function recursive_array_search($needle, $haystack) {
-        foreach($haystack as  $key=>$value){
-                if ($key==$needle) {
-                    return $value;
-                }
+
+    private function recursive_array_search($needle, $haystack)
+    {
+        foreach ($haystack as $key => $value) {
+            if ($key == $needle) {
+                return $value;
             }
+        }
         return false;
     }
 

@@ -22,45 +22,51 @@ use Illuminate\Database\Eloquent\Model;
 use Sahakavatar\Cms\Helpers\Arrays;
 
 
-class ClassifierItem extends Model {
+class ClassifierItem extends Model
+{
 
-
-    protected $table = 'classifier_items';
-
-    protected $dates = ['created_at', 'updated_at'];
-
-    protected $primaryKey = 'id';
 
     public $incrementing = false;
-
+    protected $table = 'classifier_items';
+    protected $dates = ['created_at', 'updated_at'];
+    protected $primaryKey = 'id';
     protected $guarded = array('created_at');
 
-    public function classifier(){
+    /**
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
 
-        return $this->belongsTo('Sahakavatar\Manage\Models\Classifier', 'classifier_id', 'id');
+        static::deleting(function ($model) {
+            // before delete() method call this
+            $child = $model->child()->first();
+            while ($child) {
+                $nextChild = $child->child()->first();
+                $page = $child->page()->where('type', 'classify')->first();
+                if ($page) {
+                    $page->urlManager()->where('type', 'classify')->first()->delete();
+                    $page->delete();
+                }
+                $child->delete();
+                $child = $nextChild;
+            }
+            $modelPage = $model->page()->where('type', 'classify')->first();
+            if ($modelPage) {
+                $modelPage->urlManager()->where('type', 'classify')->first()->delete();
+                $modelPage->delete();
+            }
+
+            $model->child()->delete();
+        });
     }
 
-    public function parent(){
-
-        return $this->belongsTo('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
-
-    }
-
-    public function child(){
+    public function child()
+    {
 
         return $this->hasMany('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
     }
-
-    public function page() {
-        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
-    }
-
-    public function getParentPageSlug() {
-       return $this->parent()->first()
-           ? $this->parent()->first()->page()->where('type', 'classify')->first()->url
-           : $this->classifier()->first()->page()->where('type', 'classify')->first()->url;
-    }
-
 
     public function rebuildChildren()
     {
@@ -68,12 +74,13 @@ class ClassifierItem extends Model {
         $this->rebuildChild($children);
     }
 
-    public function rebuildChild($children){
-        if(count($children)){
-            foreach ($children as $child){
+    public function rebuildChild($children)
+    {
+        if (count($children)) {
+            foreach ($children as $child) {
                 $child->buildSlug();
 
-                if($child->save()){
+                if ($child->save()) {
                     $new = self::find($child->id);
                     $page = $new->page()->where('type', 'classify')->first();
                     $page->url = $new->slug;
@@ -84,7 +91,13 @@ class ClassifierItem extends Model {
         }
     }
 
-    public function getFrontParentPages() {
+    public function page()
+    {
+        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
+    }
+
+    public function getFrontParentPages()
+    {
         $page = $this->parent()->first()
             ? $this->parent()->first()->page()->where('type', 'classify')->first()
             : $this->classifier()->first()->page()->where('type', 'classify')->first();
@@ -96,7 +109,21 @@ class ClassifierItem extends Model {
         return [];
     }
 
-    public function buildSlug() {
+    public function parent()
+    {
+
+        return $this->belongsTo('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
+
+    }
+
+    public function classifier()
+    {
+
+        return $this->belongsTo('Sahakavatar\Manage\Models\Classifier', 'classifier_id', 'id');
+    }
+
+    public function buildSlug()
+    {
         $text = $this->title;
         $text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
@@ -125,6 +152,12 @@ class ClassifierItem extends Model {
 
     }
 
+    public function getParentPageSlug()
+    {
+        return $this->parent()->first()
+            ? $this->parent()->first()->page()->where('type', 'classify')->first()->url
+            : $this->classifier()->first()->page()->where('type', 'classify')->first()->url;
+    }
 
     public function getAllMediaFolders($tax_id)
     {
@@ -189,37 +222,7 @@ class ClassifierItem extends Model {
         $term->description = $description;
         $term->save();
         //Change physical location of folder
-        \File::move(Config('config.MEDIA_PATH').$src, Config('config.MEDIA_PATH').$description);
-    }
-
-    /**
-     *
-     */
-    protected static function boot ()
-    {
-        parent::boot();
-
-        static::deleting(function ($model) {
-            // before delete() method call this
-            $child = $model->child()->first();
-            while($child) {
-                $nextChild = $child->child()->first();
-                $page = $child->page()->where('type', 'classify')->first();
-                if($page) {
-                    $page->urlManager()->where('type', 'classify')->first()->delete();
-                    $page->delete();
-                }
-                $child->delete();
-                $child = $nextChild;
-            }
-            $modelPage = $model->page()->where('type', 'classify')->first();
-            if($modelPage) {
-                $modelPage->urlManager()->where('type', 'classify')->first()->delete();
-                $modelPage->delete();
-            }
-
-            $model->child()->delete();
-        });
+        \File::move(Config('config.MEDIA_PATH') . $src, Config('config.MEDIA_PATH') . $description);
     }
 }
 

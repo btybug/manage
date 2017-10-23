@@ -1,71 +1,123 @@
 @if($page)
     {!! Form::model($page,['url' => url("/admin/manage/frontend/pages/settings", [$id]), 'id' => 'page_settings_form']) !!}
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <div class="pull-right">
-                <a data-href="{!! url('/admin/manage/frontend/pages/page-test-preview/'.$page->id."?pl_live_settings=page_live&pl=" . $page->page_layout . '&' . $placeholders) !!}"  class="live-preview-btn"  ><i
-                            class="fa fa-eye" aria-hidden="true"></i> View
-                </a>
-                {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn')) }}
+    <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 col-xl-9 page-data p-20">
+        <div class="panel panel-default custompanel m-t-20">
+            <div class="panel-heading">Page Info</div>
+            <div class="panel-body">
+                <div class="row rows">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs">
+                        <i class="fa fa-file-text" aria-hidden="true"></i><span
+                                class="labls">Page Name</span>
+                        {!! Form::text('title',null,['class' => 'page_name form-control']) !!}
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 row_inputs">
+                        <i class="fa fa-file-text" aria-hidden="true"></i><span
+                                class="labls">Page URL</span>
+                        @if($page->type == 'custom')
+                            {!! Form::text('url',null,['class' => 'page_url form-control']) !!}
+                        @else
+                            <div class="page_address page_labels">{!! $page->url !!}</div>
+                            {!! Form::hidden('url',null) !!}
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if($page->type != 'classify' && $page->type != 'tags')
+            {!! Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts::getPageLayout($page) !!}
+            {!! Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts::getPageLayoutPlaceholders($page) !!}
+        @endif
+
+        <div class="panel panel-default custompanel m-t-20">
+            <div class="panel-heading">All Hooks</div>
+            <div class="panel-body all-hooks-content">
+                @if($page->type != 'classify' && $page->type != 'tags')
+                    {!! Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts::getPageLayoutHooks($page) !!}
+                @endif
+            </div>
+        </div>
+
+
+        <div class="panel panel-default custompanel m-t-20">
+            <div class="panel-heading">All Units Comes Auto</div>
+            <div class="panel-body">
+            </div>
+        </div>
+
+        <div class="panel panel-default custompanel m-t-20">
+            <div class="panel-heading">Main Content
+                <div class="pull-right">
+                    Editor{!! Form::radio('content_type','editor',null,['data-role'=>'editor']) !!}
+                    Template{!! Form::radio('content_type','template',null,['data-role'=>'template']) !!}</div>
+            </div>
+            <div class="panel-body editor_body @if($page->content_type!='editor') hide @endif">
+                {!! Form::textarea('main_content',null,['id' => 'main_content']) !!}
+            </div>
+
+            <div class="panel-body template_body @if($page->content_type!='template') hide @endif">
+                {{--<div class="col-sm-5 p-l-0 p-r-10">--}}
+                    {{--<input name="selcteunit" data-key="title" readonly="readonly" data-id="template"--}}
+                           {{--class="page-layout-title form-control"--}}
+                           {{--value="{!! BBgetUnitAttr(($page->template)??null,'title') !!}"--}}
+                    {{-->--}}
+                {{--</div>--}}
+                {!! BBbutton2('unit','template','front_page_content',"Change",['class'=>'btn btn-default change-layout','data-action'=>'main_content','model'=>($page->content_type=='editor')?null:$page]) !!}
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-9 connected" data-bbsortable="target">
-            <div class="panel panel-default custompanel m-t-20">
-                <div class="panel-heading"> Main Content</div>
+    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 p-20">
+        <div class="panel panel-default custompanel m-t-20">
+            <div class="panel-heading">General</div>
+            <div class="panel-body">
+                <a href="javascript:void(0)" class="btn btn-info btn-block full-page-view m-b-5">Full Preview</a>
+                {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn m-b-5 btn-block','style' => "width:100%;")) }}
 
-                <div class="panel-body published_1 @if($page->content_type=='template') hide @endif" id="main_content_editor">
-                    {!! Form::textarea('main_content',null,['id' => 'main_content']) !!}
+                <div class="form-group">
+                    <i class="fa fa-file-o" aria-hidden="true"></i>
+                    <span class="labls">Status</span>
+                    {!! Form::select('status',['draft' => 'Draft','published' => 'Published'],null,["class" => 'form-control']) !!}
                 </div>
-                <div class="panel-body published_1 @if($page->content_type=='editor') hide @endif" id="main_content_template">
-                                {!! BBRenderUnits($page->template) !!}
-                </div>
-
             </div>
-            @if($page->type != 'classify' && $page->type != 'tags')
-                {!! Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts::getPageLayoutPlaceholders($page) !!}
-            @endif
         </div>
-        <div class="col-xs-12 col-sm-3 create connected" data-bbsortable="source">
-            <div class="panel panel-default custompanel m-t-20">
-                <div class="panel-heading">Main Content</div>
-                <div class="panel-body">
-                    <div class="row">
+    </div>
+    {!! Form::close() !!}
+    <input type="hidden" id="page" value="{!! $page->id !!}">
+    @include('resources::assests.magicModal')
 
-                        <!-- Multiple Radios -->
-                        <div class="form-group">
-                            <label class="col-md-2 control-label" for="radios"></label>
-                            <div class="col-md-6">
-                                <div class="radio">
-                                    <label for="radios-0">
-                                        {!! Form::radio('content_type','editor',true) !!}
-                                        Editor
+    <div class="modal fade" id="area-settings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        {{--{!! Form::open(['url'=>'/admin/backend/theme-edit/live-save', 'id'=>'magic-form']) !!}--}}
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    {{--{!! Form::submit('Save',['class' => 'btn btn-success pull-right m-r-10']) !!}--}}
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body" style="min-height: 500px;">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="checkboxes">Area access</label>
+                        <div class="col-md-4">
+                            @php
+                                $frontendRoles=new \Sahakavatar\User\Repository\RoleRepository();
+                            @endphp
+                            @foreach($frontendRoles->getFrontRoles() as $role)
+                                <div class="checkbox">
+                                    <label for="checkboxes-1">
+                                        {!! Form::checkbox('page_layout_settings[sidebar_left_roles][]',$role->slug,(isset($page->page_layout_settings['sidebar_left_roles']) && in_array($role->slug,$page->page_layout_settings['sidebar_left_roles']))?1:0) !!}
+                                        {!! $role->name !!}
                                     </label>
                                 </div>
-                                <div class="radio">
-                                    <label for="radios-1">
-                                        {!! Form::radio('content_type','template') !!}
-                                        Template
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Select Basic -->
-                        <div class="form-group page-template">
-                            <div class="col-md-8">
-                                {!! BBbutton2('unit','template','front_page_content','BBbutton2',['class'=>'btn btn-info col-md-12 page-template',"model"=>$page]) !!}
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+        {{--{!! Form::close() !!}--}}
     </div>
-    {!! Form::close() !!}
-    @include('resources::assests.magicModal')
 @else
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 design_panel">
         <div class="published_1">
@@ -73,71 +125,95 @@
         </div>
     </div>
 @endif
+<div class="modal fade" id="full-page-view" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <button class="btn close-live-edit" data-dismiss="modal" aria-label="Close">
+                <span class="fa fa-power-off"></span>
+            </button>
+            <div class="modal-body">
+                <div class="live-edit-menu">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            Action
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Some live action</a></li>
+                            <li><a href="#">Some live Settings</a></li>
+                            <li><a href="#">Some live etc</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="iframe-area"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="view-unit" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Unit Preview</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 @section('CSS')
     {!! HTML::style('/css/create_pages.css') !!}
-    <style>
-        #main-wrapper {
-            min-height: 1000px;
-            display: inline-block;
-        }
-
-        @media (min-width: 1787px) {
-            .header_image, .block {
-                height: 398px;
-            }
-        }
-
-        .live-preview-btn {
-            background: #499bc7;
-            color: #fff;
-            width: 96px;
-            height: 38px;
-            border-radius: 3px;
-            padding: 8px;
-            font-size: 17px;
-            margin-right: 10px;
-            box-shadow: 2px 1px 6px #888888;
-            cursor: pointer;
-        }
-    </style>
 @stop
 @section('JS')
     {!! HTML::script("/js/UiElements/bb_styles.js?v.5") !!}
     {!! HTML::script('/js/page-setting.js') !!}
-    {!! HTML::script("/js/UiElements/bb_div.js?v.5") !!}
+    {!! HTML::script("/js/UiElements/ui-preview-setting.js") !!}
+    {!! HTML::script("/js/UiElements/ui-settings.js") !!}
+    {!! HTML::script("/js/UiElements/bb_div.js") !!}
     {!! HTML::script('/js/tinymice/tinymce.min.js') !!}
+
     <script>
-
-        $(document).ready(function () {
-
-
-            tinymce.init({
-                selector: '#main_content', // change this value according to your HTML
-                height: 200,
-                theme: 'modern',
-                 plugins: [
-						'advlist anchor autolink autoresize autosave bbcode charmap code codesample colorpicker contextmenu directionality emoticons fullpage fullscreen hr image imagetools importcss insertdatetime legacyoutput link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount shortcodes',
-					],
-				toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-  				toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help shortcodes',
-                image_advtab: true
-            });
-
-            $('body').on('click', '.live-preview-btn', function() {
-                if(!$(this).next().hasClass('redirect-type')) {
-                    var typeInput = $('<input/>', {
-                        type: 'hidden',
-                        name: 'redirect_type',
-                        value: 'view',
-                        class: 'redirect-type'
-                    });
-                    $(this).after(typeInput);
-                    $('#page_settings_form').submit();
-                }
-
-            });
+        tinymce.init({
+            selector: '#main_content', // change this value according to your HTML
+            height: 200,
+            theme: 'modern',
+            plugins: [
+                'advlist anchor autolink autoresize autosave bbcode charmap code codesample colorpicker contextmenu directionality emoticons fullscreen hr image imagetools importcss insertdatetime legacyoutput link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount shortcodes',
+            ],
+            toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help shortcodes',
+            image_advtab: true
         });
 
+        $(document).ready(function () {
+            $("body").on("click", ".reset-placeholder", function () {
+                var key = $(this).data("reset");
+                $("[data-id=" + key + "]").val("");
+                $("[data-name=" + key + "]").val("");
+            });
+
+            $("body").on("click", ".view-placeholder", function () {
+                var key = $(this).data("view");
+                $.ajax({
+                    type: "post",
+                    datatype: "json",
+                    url: "/admin/modules/bburl/render-unit",
+                    data: {id: key},
+                    headers: {
+                        'X-CSRF-TOKEN': $('[name="_token"]').val()
+                    },
+                    success: function (data) {
+                        $("#view-unit .modal-body").html(data.html);
+                        $("#view-unit").modal();
+                    }
+                });
+            });
+        });
     </script>
+
 @stop

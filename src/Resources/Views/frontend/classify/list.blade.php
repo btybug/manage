@@ -3,7 +3,7 @@
     {!! HTML::style('app/Modules/Uploads/Resources/assets/css/new-store.css') !!}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 right">
         <article>
-            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3" >
+            <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3">
                 <div class="published_1">
                     <a href="javascript:void(0)" class="btn btn-md add-tax"><i class="fa fa-plus"></i> Add New</a>
                 </div>
@@ -12,29 +12,34 @@
                         @if(count($classifiers))
                             @foreach($classifiers as $classifier)
                                 <li class="panel panel-default page_col">
-                                @if(isset($_GET['p']) && $_GET['p'] == $classifier->id)
-                                    <div class="panel-heading" style="background-color: black;color:white;" role="tab" id="headingOne" >
-                                @else
-                                    @if($loop->first == $classifier->id && ! isset($_GET['p']))
-                                        <div class="panel-heading" style="background-color: black;color:white;" role="tab" id="headingOne" >
-                                    @else
-                                        <div class="panel-heading" role="tab" id="headingOne" >
-                                    @endif
-                                @endif
+                                    @if(isset($_GET['p']) && $_GET['p'] == $classifier->id)
+                                        <div class="panel-heading" style="background-color: black;color:white;"
+                                             role="tab" id="headingOne">
+                                            @else
+                                                @if($loop->first == $classifier->id && ! isset($_GET['p']))
+                                                    <div class="panel-heading"
+                                                         style="background-color: black;color:white;" role="tab"
+                                                         id="headingOne">
+                                                        @else
+                                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                                @endif
+                                                                @endif
 
-                                        <h4 class="panel-title">
-                                            <a href="?p={{ $classifier->id }}" aria-expanded="true" class="link_name">
-                                                {{ $classifier->title }}
-                                            </a>
-                                        </h4>
-                                    </div>
+                                                                <h4 class="panel-title">
+                                                                    <a href="?p={{ $classifier->id }}"
+                                                                       aria-expanded="true" class="link_name">
+                                                                        {{ $classifier->title }}
+                                                                    </a>
+                                                                </h4>
+                                                            </div>
                                 </li>
                             @endforeach
                         @else
                             <li data-id="'.$item->id.'" class="panel panel-default page_col">
-                                <div class="panel-heading" role="tab" id="headingOne" >
+                                <div class="panel-heading" role="tab" id="headingOne">
                                     <h4 class="panel-title">
-                                        <a data-toggle="collapse"  href="#" aria-expanded="true" aria-controls="collapseOne" class="link_name collapsed">
+                                        <a data-toggle="collapse" href="#" aria-expanded="true"
+                                           aria-controls="collapseOne" class="link_name collapsed">
                                             No Classify
                                         </a>
                                     </h4>
@@ -53,7 +58,8 @@
                         @if($model->image)
                             <img src="{!! $model->image !!}" alt="" class="layoutImg" height="175">
                         @else
-                            <img src="/app/Modules/Resources/Resources/assets/img/layout-img.jpg" alt="" class="layoutImg">
+                            <img src="/app/Modules/Resources/Resources/assets/img/layout-img.jpg" alt=""
+                                 class="layoutImg">
                         @endif
 
                         <div class="layoutData">
@@ -64,16 +70,20 @@
 
                             <div class='col-md-12'>
                                 <div class="right_btns" style="position: absolute;right: 0;top: -23px;">
-                                <a data-id="{{ $model->id }}" class="btn btn-primary edit-taxonomy" style="display: block;  margin-bottom: 8px;"><i class="fa fa-edit"></i>Edit</a>
-                                <a data-href="{!! url('/admin/manage/frontend/classify/delete') !!}" data-key="{!! $model->id !!}" data-type="Classify" class="delete-button btn btn-danger" style="display: block;    margin-bottom: 8px;"><i class="fa fa-trash"></i>Delete</a>
+                                    <a data-id="{{ $model->id }}" class="btn btn-primary edit-taxonomy"
+                                       style="display: block;  margin-bottom: 8px;"><i class="fa fa-edit"></i>Edit</a>
+                                    <a data-href="{!! url('/admin/manage/frontend/classify/delete') !!}"
+                                       data-key="{!! $model->id !!}" data-type="Classify"
+                                       class="delete-button btn btn-danger"
+                                       style="display: block;    margin-bottom: 8px;"><i class="fa fa-trash"></i>Delete</a>
                                 </div>
                             </div>
                             <div class="layoutFooter row">
                                 {{--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 ">--}}
-                                    {{--<span class="textWrap"><a href="{!! @$unit->author_site !!}" class="link"><i>{!! @$unit->author_site !!}</i></a></span>--}}
+                                {{--<span class="textWrap"><a href="{!! @$unit->author_site !!}" class="link"><i>{!! @$unit->author_site !!}</i></a></span>--}}
                                 {{--</div>--}}
                                 {{--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-4  centerText">--}}
-                                    {{--<span class="iconRefresh"><i class="fa fa-refresh"></i></span> {!! @$unit->version !!}--}}
+                                {{--<span class="iconRefresh"><i class="fa fa-refresh"></i></span> {!! @$unit->version !!}--}}
                                 {{--</div>--}}
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 rightText">
                                     <i class="fa fa-user"></i>{!! BBgetDateFormat(@$model->created_at) !!}
@@ -88,21 +98,22 @@
                 {!! Form::hidden('image',null,['id' => 'tax_image']) !!}
                 {!! Form::hidden('icon',null,['id' => 'tax_icon']) !!}
                 {!! Form::hidden('id',null) !!}
-            <div class="col-xs-12 col-sm-12 col-md-9  col-lg-9 col-xl-9 create">
-                @if(count($classifiers))
-                    <div class="published_1">
-                        <a href="javascript:void(0)" data-classifier="{!! $model->id !!}" class="btn btn-md add-term"><i class="fa fa-plus"></i> Add New Option</a>
-                    </div>
-                    <div class="published_1">
-                        <div style="padding:15px;">
+                <div class="col-xs-12 col-sm-12 col-md-9  col-lg-9 col-xl-9 create">
+                    @if(count($classifiers))
+                        <div class="published_1">
+                            <a href="javascript:void(0)" data-classifier="{!! $model->id !!}"
+                               class="btn btn-md add-term"><i class="fa fa-plus"></i> Add New Option</a>
+                        </div>
+                        <div class="published_1">
+                            <div style="padding:15px;">
                                 <ol id="menus-list" class="sortable ui-sortable ui-droppable dvmin-height terms-box">
                                     {{ \Sahakavatar\Manage\Models\Classifier::RecursiveTerms($classifierItems) }}
                                 </ol>
+                            </div>
                         </div>
-                    </div>
-                    {!! Form::close() !!}
-                @endif
-            </div>
+                        {!! Form::close() !!}
+                    @endif
+                </div>
         </article>
     </div>
 
@@ -110,7 +121,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Classify</h4>
                 </div>
                 <div class="modal-body classify_modal_body">
@@ -130,17 +142,17 @@
     {!! HTML::style('css/page.css?v=0.15') !!}
     {!! HTML::style('css/admin_pages.css') !!}
     {!! HTML::style('js/tag-it/css/jquery.tagit.css') !!}
-<style>
-    .page_labels {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: 10px 0 2px 15px;
-        background: #e8e7e7;
-        padding: 4px 13px;
-        border: 1px solid #d6d2d2;
-        font-size: 15px;
-    }
-</style>
+    <style>
+        .page_labels {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 10px 0 2px 15px;
+            background: #e8e7e7;
+            padding: 4px 13px;
+            border: 1px solid #d6d2d2;
+            font-size: 15px;
+        }
+    </style>
 @stop
 @section('JS')
     {!! HTML::script('js/create_pages.js') !!}
@@ -186,7 +198,7 @@
                         icon: icon
                     },
                     headers: {
-                        'X-CSRF-TOKEN':$("input[name='_token']").val()
+                        'X-CSRF-TOKEN': $("input[name='_token']").val()
                     },
                     success: function (data) {
                         if (!data.error) {
@@ -214,7 +226,7 @@
                         id: id
                     },
                     headers: {
-                        'X-CSRF-TOKEN':$("input[name='_token']").val()
+                        'X-CSRF-TOKEN': $("input[name='_token']").val()
                     },
                     success: function (data) {
                         if (!data.error) {
@@ -233,7 +245,7 @@
                     datatype: "json",
                     data: {},
                     headers: {
-                        'X-CSRF-TOKEN':$("input[name='_token']").val()
+                        'X-CSRF-TOKEN': $("input[name='_token']").val()
                     },
                     success: function (data) {
                         if (!data.error) {
@@ -253,10 +265,10 @@
                     datatype: "json",
                     data: {
                         terms: true,
-                        classifier : classifier
+                        classifier: classifier
                     },
                     headers: {
-                        'X-CSRF-TOKEN':$("input[name='_token']").val()
+                        'X-CSRF-TOKEN': $("input[name='_token']").val()
                     },
                     success: function (data) {
                         if (!data.error) {
@@ -278,12 +290,12 @@
                     datatype: "json",
                     data: {
                         terms: true,
-                        id:id,
-                        classifier:classifier
+                        id: id,
+                        classifier: classifier
 
                     },
                     headers: {
-                        'X-CSRF-TOKEN':$("input[name='_token']").val()
+                        'X-CSRF-TOKEN': $("input[name='_token']").val()
                     },
                     success: function (data) {
                         if (!data.error) {
@@ -300,8 +312,8 @@
                 var icon = $("[name='icon-term']").val();
                 var dataCount = $(this).data('count');
                 console.log(dataCount);
-                $("[data-count="+dataCount+"]").attr('data-title',title);
-                $("[data-count="+dataCount+"]").attr('data-desc',description);
+                $("[data-count=" + dataCount + "]").attr('data-title', title);
+                $("[data-count=" + dataCount + "]").attr('data-desc', description);
 
 
                 $(".title-area-" + dataCount).text(title);

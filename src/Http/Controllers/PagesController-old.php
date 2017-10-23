@@ -12,13 +12,15 @@
 namespace Sahakavatar\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Sahakavatar\Manage\Models\FrontendPage;
-use Sahakavatar\User\User;
 use Illuminate\Http\Request;
-use Sahakavatar\Cms\Helpers\helpers;
-use Sahakavatar\Settings\Models\Settings;
 use Illuminate\Support\Facades\Auth;
-use Input, Validator, View, Response;
+use Response;
+use Sahakavatar\Cms\Helpers\helpers;
+use Sahakavatar\Manage\Models\FrontendPage;
+use Sahakavatar\Settings\Models\Settings;
+use Sahakavatar\User\User;
+use Validator;
+use View;
 
 /**
  * Class PageController

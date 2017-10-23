@@ -27,9 +27,8 @@ use Illuminate\Database\Eloquent\Model;
 class Classifier extends Model
 {
 
-    protected $primaryKey = 'id';
-
     public $incrementing = false;
+    protected $primaryKey = 'id';
     /**
      * @var string
      */
@@ -47,16 +46,12 @@ class Classifier extends Model
      */
     protected $guarded = ['created_at'];
 
-    public function page() {
-        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_id', 'front_page_id');
-    }
-
     /**
      * @param $taxonomy
      * @param $request
      * @return array
      */
-    public static function syncrinizeTerms ($taxonomy, $request,$edit = true)
+    public static function syncrinizeTerms($taxonomy, $request, $edit = true)
     {
         $taxonomyData = $request->except('_token', 'terms');
         $terms = $request->get('terms');
@@ -84,13 +79,13 @@ class Classifier extends Model
             }
 
 
-            if (isset($terms['edit']) && ! empty($terms['edit'])) {
+            if (isset($terms['edit']) && !empty($terms['edit'])) {
                 $data = array_merge($newTerms, $terms['edit']);
                 foreach ($terms['edit'] as $k => $v) {
                     $taxonomy->classifierItem()->where('id', $v['id'])->update($v);
                 }
 
-                if (! empty($data)) {
+                if (!empty($data)) {
                     $deleted_data = [];
                     foreach ($data as $item) {
                         $deleted_data[] = $item['id'];
@@ -99,7 +94,7 @@ class Classifier extends Model
                     $taxonomy->classifierItem()->whereNotIn('id', $deleted_data)->delete();
                 }
             } else {
-                if (! isset($terms['new'])) {
+                if (!isset($terms['new'])) {
                     $taxonomy->classifierItem()->delete();
                 }
             }
@@ -113,41 +108,11 @@ class Classifier extends Model
 
     }
 
-    public function buildSlug() {
-        $text = $this->title;
-        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
-
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-        // trim
-        $text = trim($text, '-');
-
-        // remove duplicate -
-        $text = preg_replace('~-+~', '-', $text);
-
-        // lowercase
-        $text = strtolower($text);
-
-        if (empty($text)) {
-            return 'n-a';
-        }
-
-        $this->slug = $this->validateSlug($text);
-    }
-
-    public function validateSlug($text) {
-        return self::where('slug', $text)->count() ? $text . '-1' : $text;
-    }
-
     /**
      * @param $terms
      * @param int $i
      */
-    public static function RecursiveTerms ($terms, $i = 0)
+    public static function RecursiveTerms($terms, $i = 0)
     {
         if (count($terms)) {
             $term = $terms[$i];
@@ -160,13 +125,13 @@ class Classifier extends Model
             //print item title
             echo '<span class="title-area-' . $term->id . '">' . $term->title . '</span>';
             //open Edit button
-            echo '<button type="button" class="edit-term btn btn-primary btn-sm pull-right " data-classifier="'.$term->classifier_id.'" data-id="' . $term->id . '" >';
+            echo '<button type="button" class="edit-term btn btn-primary btn-sm pull-right " data-classifier="' . $term->classifier_id . '" data-id="' . $term->id . '" >';
             //set edit icon
             echo '<i class="fa fa-edit"></i>';
             //close Edit button
             echo '</button>';
             //open Delete button
-            echo '<button type="button" data-href="/admin/manage/frontend/classify/delete-item" data-key="'. $term->id .'" data-type="Classify Item" class="delete-button btn btn-danger btn-sm  pull-right m-r-5">';
+            echo '<button type="button" data-href="/admin/manage/frontend/classify/delete-item" data-key="' . $term->id . '" data-type="Classify Item" class="delete-button btn btn-danger btn-sm  pull-right m-r-5">';
             //set delete icon
             echo '<i class="fa fa-trash"></i>';
             //close Delete button
@@ -197,39 +162,40 @@ class Classifier extends Model
             }
         }
     }
-    public static function RecursiveTermsFields ($terms, $i = 0)
+
+    public static function RecursiveTermsFields($terms, $i = 0)
     {
-        $result='';
+        $result = '';
         if (count($terms)) {
             $term = $terms[$i];
             //open li and put parent and item datas
-            $result.= '<li data-parent="' . $term->parent_id . '" data-item="' . $term->id . '">';
+            $result .= '<li data-parent="' . $term->parent_id . '" data-item="' . $term->id . '">';
             //open div set sortable class
-            
-			
-			$result.= '<div class="drag-handle not-selected">';
+
+
+            $result .= '<div class="drag-handle not-selected">';
             //set icon
-			
-            $result.= ' <i class="' . $term->icon . '" bb-icon="' . $term->id . '" aria-hidden="true"> <input name="classify_child[]" type="checkbox"></i>';
+
+            $result .= ' <i class="' . $term->icon . '" bb-icon="' . $term->id . '" aria-hidden="true"> <input name="classify_child[]" type="checkbox"></i>';
             //print item title
-            $result.= ' <span class="title-area-' . $term->id . '">' . $term->title . '</span>';
+            $result .= ' <span class="title-area-' . $term->id . '">' . $term->title . '</span>';
             //close sortable div
-            $result.= '</div>';
-			
+            $result .= '</div>';
+
             if (count($term->child)) {
                 //open child ol
-				$result.= '<button type="button" data-collapsible="button" class="btnplus"><i class="fa fa-minus" aria-hidden="true"></i></button>';
-				
-                $result.= "<ul class='list-unstyled p-l-15'>";
-                $result.=  self::RecursiveTermsFields($term->child, 0);
+                $result .= '<button type="button" data-collapsible="button" class="btnplus"><i class="fa fa-minus" aria-hidden="true"></i></button>';
+
+                $result .= "<ul class='list-unstyled p-l-15'>";
+                $result .= self::RecursiveTermsFields($term->child, 0);
                 //close child ol
-                $result.= "</ul>";
+                $result .= "</ul>";
             }
             //close li
-            $result.= "</li>";
+            $result .= "</li>";
             $i++;
             if ($i != count($terms)) {
-                $result.=  self::RecursiveTermsFields($terms, $i);
+                $result .= self::RecursiveTermsFields($terms, $i);
             }
         }
         return $result;
@@ -238,7 +204,7 @@ class Classifier extends Model
     /**
      *
      */
-    protected static function boot ()
+    protected static function boot()
     {
         parent::boot();
 
@@ -248,10 +214,47 @@ class Classifier extends Model
         });
     }
 
+    public function page()
+    {
+        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_id', 'front_page_id');
+    }
+
+    public function buildSlug()
+    {
+        $text = $this->title;
+        $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+
+        // transliterate
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = trim($text, '-');
+
+        // remove duplicate -
+        $text = preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+
+        $this->slug = $this->validateSlug($text);
+    }
+
+    public function validateSlug($text)
+    {
+        return self::where('slug', $text)->count() ? $text . '-1' : $text;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function classifierItem ()
+    public function classifierItem()
     {
         return $this->hasMany('Sahakavatar\Manage\Models\ClassifierItem', 'classifier_id', 'id');
     }

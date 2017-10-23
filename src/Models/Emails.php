@@ -9,10 +9,10 @@
 namespace Sahakavatar\Manage\Models;
 
 
+use App\Http\Middleware\CustomSCMiddleware;
 use App\Models\EventSubscriber\Independent\Independent;
 use App\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Middleware\CustomSCMiddleware;
 
 class Emails extends Model
 {
@@ -30,7 +30,7 @@ class Emails extends Model
     public function onFormSubmit($event)
     {
         $this->getConnectionName();
-         $middleware=new CustomSCMiddleware();
+        $middleware = new CustomSCMiddleware();
         $user = $event->user;
         $form = $event->form;
         $entry = $event->entry;
@@ -41,23 +41,23 @@ class Emails extends Model
             \Eventy::action('emil.entry', $entry);
             $emails = self::where('event_code', 'form_submited')->where('trigger_on_form', $form->slug)->get();
             foreach ($emails as $email) {
-                $key=$email->content;
-                $html=\View::make('emails.1',compact('key'))->render();
+                $key = $email->content;
+                $html = \View::make('emails.1', compact('key'))->render();
 
-                \Mail::queue('emails.1', ['key' =>$middleware->htmlContentHandler($html) ], function ($message) use ($user,$email) {
+                \Mail::queue('emails.1', ['key' => $middleware->htmlContentHandler($html)], function ($message) use ($user, $email) {
                     $message->from($email->from_, $name = null);
 //                    $message->sender($email->subject, $name = null);
                     $message->to($user->email, $user->username);
-                    if(!empty($email->cc)){
-                        $ccEmails=explode(',',$email->cc);
-                        foreach ($ccEmails as $ccEmail){
+                    if (!empty($email->cc)) {
+                        $ccEmails = explode(',', $email->cc);
+                        foreach ($ccEmails as $ccEmail) {
                             $message->cc($ccEmail, $name = null);
                         }
 
                     }
-                    if(!empty($email->bcc)){
-                        $bccEmails=explode(',',$email->bcc);
-                        foreach ($bccEmails as $bccEmail){
+                    if (!empty($email->bcc)) {
+                        $bccEmails = explode(',', $email->bcc);
+                        foreach ($bccEmails as $bccEmail) {
                             $message->bcc($bccEmail, $name = null);
                         }
 
@@ -105,7 +105,6 @@ class Emails extends Model
     {
         return isset($model[$key]) ? $model[$key] : null;
     }
-
 
 
     public function test($event)

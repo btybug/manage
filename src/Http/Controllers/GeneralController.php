@@ -11,12 +11,12 @@
 
 namespace Sahakavatar\Manage\Http\Controllers;
 
-use Sahakavatar\Cms\Helpers\dbhelper;
-use Sahakavatar\Cms\Helpers\helpers;
 use App\Http\Controllers\Controller;
-use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
 use File;
 use Illuminate\Http\Request;
+use Sahakavatar\Cms\Helpers\dbhelper;
+use Sahakavatar\Cms\Helpers\helpers;
+use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
 
 /**
  * Class SettingsController
@@ -44,7 +44,7 @@ class GeneralController extends Controller
      * @param dbhelper $dbhelper
      * @param Settings $settings
      */
-    public function __construct (dbhelper $dbhelper, Settings $settings)
+    public function __construct(dbhelper $dbhelper, Settings $settings)
     {
         $this->dbhelper = $dbhelper;
         $this->settings = $settings;
@@ -54,10 +54,9 @@ class GeneralController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getIndex ()
+    public function getIndex()
     {
         $system = $this->settings->getSystemSettings();
-
         return view('manage::frontend.general.index', compact(['system']));
     }
 
@@ -65,7 +64,7 @@ class GeneralController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postSettings (Request $request)
+    public function postSettings(Request $request)
     {
         $input = $request->except('_token');
         if ($request->file('site_logo')) {
