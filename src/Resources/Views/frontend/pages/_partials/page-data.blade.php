@@ -72,7 +72,7 @@
             <div class="panel-heading">General</div>
             <div class="panel-body">
                 <a href="javascript:void(0)" class="btn btn-info btn-block full-page-view m-b-5">Full Preview</a>
-                {{ Form::button('<i class="fa fa-check" aria-hidden="true"></i> Save', array('type' => 'submit', 'class' => 'save_btn m-b-5 btn-block','style' => "width:100%;")) }}
+                {{ Form::submit('Save', array('class' => 'save_btn m-b-5 btn-block','style' => "width:100%;")) }}
 
                 <div class="form-group">
                     <i class="fa fa-file-o" aria-hidden="true"></i>

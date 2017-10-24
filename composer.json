@@ -1,17 +1,17 @@
 {
-    "name": "sahak.avatar/manage",
-    "authors": [
-        {
-            "name": "Eduard",
-            "email": "edo.terakyan@gmail.com"
-        }
-    ],
-    "type": "module",
-    "route": "manage",
-    "require": {},
-	"autoload": {
-        "psr-4": {
-            "Sahakavatar\\Manage\\": "src/"
-        }
+  "name": "sahak.avatar/manage",
+  "authors": [
+    {
+      "name": "Eduard",
+      "email": "edo.terakyan@gmail.com"
     }
+  ],
+  "type": "module",
+  "route": "manage",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Sahakavatar\\Manage\\": "src/"
+    }
+  }
 }
