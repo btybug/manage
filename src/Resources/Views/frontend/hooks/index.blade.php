@@ -1,4 +1,4 @@
-@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
+@extends('btybug::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
     <div role="tabpanel" class="m-t-10" id="main">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 main_container_11">

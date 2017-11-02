@@ -1,5 +1,5 @@
 {
-  "name": "sahak.avatar/manage",
+  "name": "btybug/manage",
   "authors": [
     {
       "name": "Eduard",
@@ -11,7 +11,7 @@
   "require": {},
   "autoload": {
     "psr-4": {
-      "Sahakavatar\\Manage\\": "src/"
+      "Btybug\\Manage\\": "src/"
     }
   }
 }

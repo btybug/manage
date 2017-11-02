@@ -16,7 +16,7 @@
  * Time: 11:25 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Sahakavatar\Cms\Helpers\Arrays;
@@ -65,7 +65,7 @@ class ClassifierItem extends Model
     public function child()
     {
 
-        return $this->hasMany('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
+        return $this->hasMany('Btybug\Manage\Models\ClassifierItem', 'parent_id');
     }
 
     public function rebuildChildren()
@@ -93,7 +93,7 @@ class ClassifierItem extends Model
 
     public function page()
     {
-        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
+        return $this->belongsToMany('Btybug\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_item_id', 'front_page_id');
     }
 
     public function getFrontParentPages()
@@ -112,14 +112,14 @@ class ClassifierItem extends Model
     public function parent()
     {
 
-        return $this->belongsTo('Sahakavatar\Manage\Models\ClassifierItem', 'parent_id');
+        return $this->belongsTo('Btybug\Manage\Models\ClassifierItem', 'parent_id');
 
     }
 
     public function classifier()
     {
 
-        return $this->belongsTo('Sahakavatar\Manage\Models\Classifier', 'classifier_id', 'id');
+        return $this->belongsTo('Btybug\Manage\Models\Classifier', 'classifier_id', 'id');
     }
 
     public function buildSlug()

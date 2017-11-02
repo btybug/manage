@@ -9,14 +9,14 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use File;
 use Illuminate\Http\Request;
 use Sahakavatar\Cms\Helpers\dbhelper;
 use Sahakavatar\Cms\Helpers\helpers;
-use Sahakavatar\Settings\Repository\AdminsettingRepository as Settings;
+use Btybug\Settings\Repository\AdminsettingRepository as Settings;
 
 /**
  * Class SettingsController

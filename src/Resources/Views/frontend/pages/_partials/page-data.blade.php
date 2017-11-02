@@ -101,7 +101,7 @@
                         <label class="col-md-4 control-label" for="checkboxes">Area access</label>
                         <div class="col-md-4">
                             @php
-                                $frontendRoles=new \Sahakavatar\User\Repository\RoleRepository();
+                                $frontendRoles=new \Btybug\User\Repository\RoleRepository();
                             @endphp
                             @foreach($frontendRoles->getFrontRoles() as $role)
                                 <div class="checkbox">

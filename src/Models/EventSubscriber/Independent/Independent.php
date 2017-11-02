@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Models\EventSubscriber\Independent;
+namespace Btybug\Manage\Models\EventSubscriber\Independent;
 
 /**
  * Created by PhpStorm.

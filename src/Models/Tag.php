@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,6 +29,6 @@ class Tag extends Model
 
     public function pages()
     {
-        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'frontend_pages_tags', 'tags_id', 'frontend_page_id', 'id');
+        return $this->belongsToMany('Btybug\Manage\Models\FrontendPage', 'frontend_pages_tags', 'tags_id', 'frontend_page_id', 'id');
     }
 }

@@ -9,14 +9,14 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Datatables;
 use File;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Sahakavatar\User\Models\Roles;
+use Btybug\User\Models\Roles;
 use Table;
 use TableView;
 use Validator;

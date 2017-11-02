@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Providers;
+namespace Btybug\Manage\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -48,14 +48,14 @@ class EventServiceProvider extends ServiceProvider
         \Subscriber::addEvent('on Page Create', 'App\Events\PageCreateEvent');
 
 
-        \Subscriber::addProperty('Notification', 'Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification');
-        \Subscriber::addProperty('Dates Between', 'Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@DatesBetween');
-        \Subscriber::addProperty('check User Age', 'Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@checkUserAge');
+        \Subscriber::addProperty('Notification', 'Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification');
+        \Subscriber::addProperty('Dates Between', 'Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@DatesBetween');
+        \Subscriber::addProperty('check User Age', 'Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@checkUserAge');
         \Subscriber::add('App\Events\FormSubmit', 'SahakavatarManage\Models\Emails@onFormSubmit', ['qaq' => 'cer']);
-//        \Subscriber::add('App\Events\AfterLoginEvent','Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Abokamal','alert_class'=>'info']);
-//        \Subscriber::add('App\Events\AfterLoginEvent','Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Edo','alert_class'=>'success']);
-//        \Subscriber::add('App\Events\AfterLoginEvent','Sahakavatar\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Ara','alert_class'=>'warning']);
-        \Subscriber::add('App\Events\CustomEvent', 'Sahakavatar\Manage\Models\Emails@test');
+//        \Subscriber::add('App\Events\AfterLoginEvent','Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Abokamal','alert_class'=>'info']);
+//        \Subscriber::add('App\Events\AfterLoginEvent','Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Edo','alert_class'=>'success']);
+//        \Subscriber::add('App\Events\AfterLoginEvent','Btybug\Manage\Models\EventSubscriber\Independent\CoreIndependents@Notification', ['message' => 'Hi Ara','alert_class'=>'warning']);
+        \Subscriber::add('App\Events\CustomEvent', 'Btybug\Manage\Models\Emails@test');
 
         parent::boot();
 

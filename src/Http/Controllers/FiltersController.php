@@ -9,7 +9,7 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExtraModules\Structures;

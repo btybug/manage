@@ -9,7 +9,7 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,15 +19,15 @@ use Sahakavatar\Cms\Models\ContentLayouts\ContentLayouts;
 use Sahakavatar\Cms\Models\ContentLayouts\MainBody;
 use Sahakavatar\Cms\Services\CmsItemReader;
 use Sahakavatar\Cms\Services\HookService;
-use Sahakavatar\Console\Repository\FrontPagesRepository;
-use Sahakavatar\Manage\Models\FrontendPage;
-use Sahakavatar\Manage\Repository\ClassifierRepository;
-use Sahakavatar\Manage\Services\ClassifierService;
-use Sahakavatar\Manage\Services\FrontendPageService;
-use Sahakavatar\Modules\Models\Fields;
-use Sahakavatar\Settings\Models\Settings;
-use Sahakavatar\User\Services\RoleService;
-use Sahakavatar\User\Services\UserService;
+use Btybug\Console\Repository\FrontPagesRepository;
+use Btybug\Manage\Models\FrontendPage;
+use Btybug\Manage\Repository\ClassifierRepository;
+use Btybug\Manage\Services\ClassifierService;
+use Btybug\Manage\Services\FrontendPageService;
+use Btybug\Modules\Models\Fields;
+use Btybug\Settings\Models\Settings;
+use Btybug\User\Services\RoleService;
+use Btybug\User\Services\UserService;
 use Validator;
 use View;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

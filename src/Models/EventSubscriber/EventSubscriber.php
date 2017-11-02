@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Models\EventSubscriber;
+namespace Btybug\Manage\Models\EventSubscriber;
 
 
 final class EventSubscriber

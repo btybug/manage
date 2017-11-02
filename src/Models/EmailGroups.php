@@ -6,7 +6,7 @@
  * Time: 2:16 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -21,6 +21,6 @@ class EmailGroups extends Model
 
     public function emails()
     {
-        return $this->hasMany('Sahakavatar\Manage\Models\Emails', 'group_id');
+        return $this->hasMany('Btybug\Manage\Models\Emails', 'group_id');
     }
 }

@@ -6,7 +6,7 @@
  * Time: 2:07 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 
 use app\Models\BaseModel;

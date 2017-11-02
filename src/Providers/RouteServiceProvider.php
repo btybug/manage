@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Providers;
+namespace Btybug\Manage\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'Sahakavatar\Manage\Http\Controllers';
+    protected $namespace = 'Btybug\Manage\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Providers;
+namespace Btybug\Manage\Providers;
 
 //use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;

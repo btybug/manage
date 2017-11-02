@@ -6,14 +6,14 @@
  * Time: 13:59
  */
 
-namespace Sahakavatar\Manage\Services;
+namespace Btybug\Manage\Services;
 
 
 use Illuminate\Http\Request;
 use Sahakavatar\Cms\Services\GeneralService;
-use Sahakavatar\Console\Repository\FrontPagesRepository;
-use Sahakavatar\Settings\Repository\AdminsettingRepository;
-use Sahakavatar\User\Repository\PermissionRoleRepository;
+use Btybug\Console\Repository\FrontPagesRepository;
+use Btybug\Settings\Repository\AdminsettingRepository;
+use Btybug\User\Repository\PermissionRoleRepository;
 
 class FrontendPageService extends GeneralService
 {
@@ -114,6 +114,52 @@ class FrontendPageService extends GeneralService
             return http_build_query($pageLayoutSettings);
         }
     }
+
+    public static function generateSpecialPage(array $data)
+    {
+        if(
+            isset($data['module_id'])
+            && isset($data['url'])
+            && isset($data['file_path'])
+            && isset($data['edit_url'])
+        ){
+            $pageRepo = new FrontPagesRepository();
+            if(isset($data['slug'])){
+                if(isset($data['prefix'])){
+                    $page = $pageRepo->findOneByMultiple(['slug' => $data['slug'],'url' => $data['prefix'] .'/'.$data['url']]);
+                }else{
+                    $page = $pageRepo->findOneByMultiple(['slug' => $data['slug'],'url' => $data['url']]);
+                }
+            }else{
+                if(isset($data['prefix'])){
+                    $page = $pageRepo->findBy('url',$data['prefix'] .'/'.$data['url']);
+                }else{
+                    $page = $pageRepo->findBy('url',$data['url']);
+                }
+            }
+
+            if($page) return false;
+
+            $frontPageRepo = new FrontPagesRepository();
+            return $frontPageRepo->create([
+                'user_id' => \Auth::id(),
+                'title' => (isset($data['title'])) ? $data['title'] : "New Page",
+                'slug' => (isset($data['slug'])) ? $data['slug'] : uniqid(),
+                'header' => 0,
+                'footer' => 0,
+                'status' => (isset($data['status'])) ? $data['status'] : "published",
+                'page_access' => (isset($data['page_access'])) ? $data['page_access'] : 1,
+                'page_layout' => null,
+                'page_layout_settings' => null,
+                'url' => (isset($data['prefix'])) ? $data['prefix'] .'/'.$data['url'] : $data['url'],
+                'parent_id' => (isset($data['parent_id'])) ? $data['parent_id'] : null,
+                'type' => 'plugin',
+                'content_type' => 'special',
+                'settings' => json_encode(['file_path' => $data['file_path'],'edit_url' => $data['edit_url']], true)
+            ]);
+        }
+    }
+
 
 
 }

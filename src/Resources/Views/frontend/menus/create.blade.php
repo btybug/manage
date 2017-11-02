@@ -1,4 +1,4 @@
-@extends('cms::layouts.admin')
+@extends('btybug::layouts.admin')
 @section('content')
     <div class="menu_page">
         {!! Form::open(['url'=>'/admin/manage/frontend/menus/create' , 'class' => 'form-horizontal']) !!}

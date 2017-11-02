@@ -1,4 +1,4 @@
-@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
+@extends('btybug::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
     <div class="m-b-20 col-md-3 m-l-20">
         {!! Form::select('type',['core' => 'Core','plugin' => "Module",'custom' => 'Custom','classify' => 'Classify','tags' => 'Tags'],$type,['class' => 'form-control select-type']) !!}

@@ -6,11 +6,11 @@
  * Time: 18:05
  */
 
-namespace Sahakavatar\Manage\Repository;
+namespace Btybug\Manage\Repository;
 
 
 use Sahakavatar\Cms\Repositories\GeneralRepository;
-use Sahakavatar\Manage\Models\ClassifierItemPage;
+use Btybug\Manage\Models\ClassifierItemPage;
 
 class ClassifierItemPageRepository extends GeneralRepository
 {

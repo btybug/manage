@@ -16,7 +16,7 @@
  * Time: 10:59 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -216,7 +216,7 @@ class Classifier extends Model
 
     public function page()
     {
-        return $this->belongsToMany('Sahakavatar\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_id', 'front_page_id');
+        return $this->belongsToMany('Btybug\Manage\Models\FrontendPage', 'classify_items_pages', 'classifier_id', 'front_page_id');
     }
 
     public function buildSlug()
@@ -256,7 +256,7 @@ class Classifier extends Model
      */
     public function classifierItem()
     {
-        return $this->hasMany('Sahakavatar\Manage\Models\ClassifierItem', 'classifier_id', 'id');
+        return $this->hasMany('Btybug\Manage\Models\ClassifierItem', 'classifier_id', 'id');
     }
 
 }

@@ -6,7 +6,7 @@
  * Time: 12:06 PM
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 
 use Illuminate\Http\Request;

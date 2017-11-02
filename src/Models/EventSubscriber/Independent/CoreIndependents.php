@@ -6,7 +6,7 @@
  * Time: 9:06 AM
  */
 
-namespace Sahakavatar\Manage\Models\EventSubscriber\Independent;
+namespace Btybug\Manage\Models\EventSubscriber\Independent;
 
 
 class CoreIndependents extends Independent

@@ -1,4 +1,4 @@
-@extends('cms::layouts.admin')
+@extends('btybug::layouts.admin')
 @section('content')
     <div class="row">
         <div class="col-md-6">
@@ -46,7 +46,7 @@
                              aria-labelledby="headingLink1">
                             <div class="panel-body panel_body panel_1 show">
                                 <ol id="menus-list" class="sortable ui-sortable ui-droppable dvmin-height terms-box">
-                                    {!! \Sahakavatar\Manage\Models\Classifier::RecursiveTerms($terms) !!}
+                                    {!! \Btybug\Manage\Models\Classifier::RecursiveTerms($terms) !!}
                                 </ol>
                             </div>
                         </div>

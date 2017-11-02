@@ -1,6 +1,6 @@
 <?php
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,7 +9,7 @@ use Sahakavatar\Cms\Repositories\HookRepository;
 
 /**
  * Class HooksController
- * @package Sahakavatar\Manage\Http\Controllers
+ * @package Btybug\Manage\Http\Controllers
  */
 class HooksController extends Controller
 {

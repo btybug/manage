@@ -6,11 +6,11 @@
  * Time: 18:11
  */
 
-namespace Sahakavatar\Manage\Services;
+namespace Btybug\Manage\Services;
 
 use Sahakavatar\Cms\Services\GeneralService;
-use Sahakavatar\Manage\Repository\ClassifierItemPageRepository;
-use Sahakavatar\Manage\Repository\ClassifierRepository;
+use Btybug\Manage\Repository\ClassifierItemPageRepository;
+use Btybug\Manage\Repository\ClassifierRepository;
 
 class ClassifierService extends GeneralService
 {

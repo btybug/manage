@@ -1,4 +1,4 @@
-@extends('cms::layouts.mTabs',['index'=>'frontend_manage'])
+@extends('btybug::layouts.mTabs',['index'=>'frontend_manage'])
 @section('tab')
     {!! HTML::style('css/new-store.css') !!}
     <div class="row">

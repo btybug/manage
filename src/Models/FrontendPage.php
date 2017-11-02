@@ -6,15 +6,15 @@
  * Time: 2:17 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Sahakavatar\Cms\Models\Urlmanager;
-use Sahakavatar\User\Models\Membership;
+use Btybug\User\Models\Membership;
 
 /**
  * Class FrontendPage
- * @package Sahakavatar\Manage\Models
+ * @package Btybug\Manage\Models
  */
 class FrontendPage extends Model
 {
@@ -188,12 +188,12 @@ class FrontendPage extends Model
 
     public function permission_membership()
     {
-        return $this->hasMany('Sahakavatar\User\Models\MembershipPermissions', 'page_id', 'id');
+        return $this->hasMany('Btybug\User\Models\MembershipPermissions', 'page_id', 'id');
     }
 
     public function permission_role()
     {
-        return $this->hasMany('Sahakavatar\User\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
+        return $this->hasMany('Btybug\User\Models\PermissionRole', 'page_id', 'id')->where('page_type', 'front');
     }
 
     /**
@@ -225,7 +225,7 @@ class FrontendPage extends Model
      */
     public function editor()
     {
-        return $this->belongsTo('Sahakavatar\User\User', 'edited_by', 'id');
+        return $this->belongsTo('Btybug\User\User', 'edited_by', 'id');
     }
 
     /**
@@ -233,7 +233,7 @@ class FrontendPage extends Model
      */
     public function author()
     {
-        return $this->belongsTo('Sahakavatar\User\User', 'user_id', 'id');
+        return $this->belongsTo('Btybug\User\User', 'user_id', 'id');
     }
 
     /**

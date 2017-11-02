@@ -6,7 +6,7 @@
  * Time: 3:05 PM
  */
 
-namespace Sahakavatar\Manage\Models\EventSubscriber;
+namespace Btybug\Manage\Models\EventSubscriber;
 
 
 class Subscriber

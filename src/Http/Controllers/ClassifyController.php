@@ -9,17 +9,17 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Urlmanager;
 use Datatables;
 use Illuminate\Http\Request;
 use Sahakavatar\Cms\Helpers\helpers;
-use Sahakavatar\Manage\Models\Classifier;
-use Sahakavatar\Manage\Models\ClassifierItem;
-use Sahakavatar\Manage\Models\ClassifierItemPage;
-use Sahakavatar\Manage\Models\FrontendPage;
+use Btybug\Manage\Models\Classifier;
+use Btybug\Manage\Models\ClassifierItem;
+use Btybug\Manage\Models\ClassifierItemPage;
+use Btybug\Manage\Models\FrontendPage;
 
 /**
  * Class ClassifyController

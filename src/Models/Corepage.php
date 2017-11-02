@@ -9,7 +9,7 @@
  *
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Sahakavatar\Cms\Helpers\helpers;
@@ -69,7 +69,7 @@ class Corepage extends Model
 
     public function groups()
     {
-        return $this->belongsToMany('Sahakavatar\User\Groups', 'page_groups', 'page_id', 'group_id');
+        return $this->belongsToMany('Btybug\User\Groups', 'page_groups', 'page_id', 'group_id');
     }
 
     public function urlmanager()

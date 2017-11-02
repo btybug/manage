@@ -1,4 +1,4 @@
-@extends('cms::layouts.frontend')
+@extends('btybug::layouts.frontend')
 @section('content')
     <div class="col-md-12 m-15">
         <button class="btn btn-info pull-right" data-settingaction="setting"> Setting</button>

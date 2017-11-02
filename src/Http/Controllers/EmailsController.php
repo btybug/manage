@@ -6,13 +6,13 @@
  * Time: 11:47 AM
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Sahakavatar\Manage\Models\EmailGroups;
-use Sahakavatar\Manage\Models\Emails;
-use Sahakavatar\Modules\Models\Forms;
+use Btybug\Manage\Models\EmailGroups;
+use Btybug\Manage\Models\Emails;
+use Btybug\Modules\Models\Forms;
 use Yajra\Datatables\Datatables;
 
 class EmailsController extends Controller

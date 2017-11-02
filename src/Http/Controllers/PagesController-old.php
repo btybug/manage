@@ -9,16 +9,16 @@
  *
  */
 
-namespace Sahakavatar\Manage\Http\Controllers;
+namespace Btybug\Manage\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Response;
 use Sahakavatar\Cms\Helpers\helpers;
-use Sahakavatar\Manage\Models\FrontendPage;
-use Sahakavatar\Settings\Models\Settings;
-use Sahakavatar\User\User;
+use Btybug\Manage\Models\FrontendPage;
+use Btybug\Settings\Models\Settings;
+use Btybug\User\User;
 use Validator;
 use View;
 

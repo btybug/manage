@@ -6,7 +6,7 @@
  * Time: 2:21 PM
  */
 
-namespace Sahakavatar\Manage\Models;
+namespace Btybug\Manage\Models;
 
 
 use App\Http\Middleware\CustomSCMiddleware;
@@ -24,7 +24,7 @@ class Emails extends Model
 
     public function group()
     {
-        return $this->belongsTo('Sahakavatar\Manage\Models\EmailGroups', 'group_id');
+        return $this->belongsTo('Btybug\Manage\Models\EmailGroups', 'group_id');
     }
 
     public function onFormSubmit($event)

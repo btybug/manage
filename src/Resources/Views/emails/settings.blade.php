@@ -1,4 +1,4 @@
-@extends('cms::layouts.mTabs',['index'=>'manage_emails'])
+@extends('btybug::layouts.mTabs',['index'=>'manage_emails'])
 @section('tab')
     <div class="row m-t-8">
         <div class="col-sm-8">
